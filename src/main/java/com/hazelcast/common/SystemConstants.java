@@ -7,4 +7,6 @@ public class SystemConstants {
 	public static final String  INSTANCE_LISTENER_DEFINITION = "com.hazelcast.annotation.InstanceListener";
 	public static final String  MEMBERSHIP_LISTENER_DEFINITION = "com.hazelcast.annotation.MembershipListener";
 	
+	public static final String  EXECUTOR_SERVICE_DEFINITION = "com.hazelcast.annotation.ExecutorService";
+	
 }
