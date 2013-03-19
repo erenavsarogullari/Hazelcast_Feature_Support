@@ -9,4 +9,6 @@ public class SystemConstants {
 	
 	public static final String  EXECUTOR_SERVICE_DEFINITION = "com.hazelcast.annotation.ExecutorService";
 	
+	public static final String CLASS_SUFFIX = ".class";
+	
 }

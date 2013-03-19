@@ -13,5 +13,6 @@ public @interface ItemListener {
 
 	ItemTypeEnum type();
 	String distributedObjectName();
+	boolean needsValue() default false;
 	
 }
