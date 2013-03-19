@@ -15,7 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.hazelcast.annotation.ExecutorService;
 import com.hazelcast.annotation.ItemListener;
+import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
 import com.hazelcast.annotation.processor.ItemListenerProcessor;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.Annotations.SupportedAnnotation;
@@ -48,6 +50,7 @@ public class HazelcastAnnotationBuilder {
 	
 	private static void registerAnnotationsToProcessors() {
 		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
+		registerAnnotationToProcessor(ExecutorService.class, new ExecutorServiceProcessor());
 	}
 
     private static void registerAnnotationToProcessor(Class<?> clazz, HazelcastAnnotationProcessor processor) {
@@ -65,7 +68,6 @@ public class HazelcastAnnotationBuilder {
                         processor.process(clazz, clazz.getAnnotation((Class)supportedAnnotation.getClassType()));
                     }
                 }
-
             }
         }
     }
