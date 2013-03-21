@@ -15,8 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.ExecutorService;
 import com.hazelcast.annotation.ItemListener;
+import com.hazelcast.annotation.processor.EntryListenerProcessor;
 import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
 import com.hazelcast.annotation.processor.ItemListenerProcessor;
 import com.hazelcast.common.Annotations;
@@ -49,8 +51,13 @@ public class HazelcastAnnotationBuilder {
 	}
 	
 	private static void registerAnnotationsToProcessors() {
-		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
+		
+		//Fields
 		registerAnnotationToProcessor(ExecutorService.class, new ExecutorServiceProcessor());
+		
+		//Types
+		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
+		registerAnnotationToProcessor(EntryListener.class, new EntryListenerProcessor());
 	}
 
     private static void registerAnnotationToProcessor(Class<?> clazz, HazelcastAnnotationProcessor processor) {

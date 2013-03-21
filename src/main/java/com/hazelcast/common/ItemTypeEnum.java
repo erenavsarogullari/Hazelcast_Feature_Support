@@ -2,9 +2,9 @@ package com.hazelcast.common;
 
 public enum ItemTypeEnum {
 
-	LIST("L"), 
-	SET("S"), 
-	QUEUE("Q");
+	LIST("LIST"), 
+	SET("SET"), 
+	QUEUE("QUEUE");
 	
 	private String itemType;
 

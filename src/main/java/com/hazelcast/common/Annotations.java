@@ -1,6 +1,7 @@
 package com.hazelcast.common;
 
 import com.hazelcast.annotation.Configuration;
+import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.ExecutorService;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.MembershipListener;
@@ -18,7 +19,8 @@ public class Annotations {
     public enum SupportedAnnotation {
     	
         CONFIGURATION(Configuration.class), 
-        ITEM_LISTENER(ItemListener.class), 
+        ITEM_LISTENER(ItemListener.class),
+        ENTRY_LISTENER(EntryListener.class),
         MEMBERSHIP_LISTENER(MembershipListener.class),
         EXECUTOR_SERVICE(ExecutorService.class);
         

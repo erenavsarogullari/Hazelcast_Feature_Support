@@ -11,6 +11,9 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
+import com.hazelcast.core.IMap;
+import com.hazelcast.core.ISet;
+import com.hazelcast.core.MultiMap;
 
 public class Main {
 	
@@ -25,10 +28,20 @@ public class Main {
         
         HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
         
-        IList<Object> list = instance.getList("test");
-        list.add("Deneme");
-        list.add("Deneme 2");
-        list.add("Deneme 3");
+        IList<String> testList1 = instance.getList("testList1");
+        testList1.add("Deneme 1 " + testList1);
+        testList1.add("Deneme 2 ");
+        testList1.add("Deneme 3 ");
+        
+        IList<String> testList2 = instance.getList("testList2");
+        testList2.add("Deneme 4 " + testList2);
+        testList2.add("Deneme 5 ");
+        testList2.add("Deneme 6 ");
+        
+        ISet<String> testSet1 = instance.getSet("testSet1");
+        testSet1.add("Deneme 7 " + testSet1);
+        testSet1.add("Deneme 8 ");
+        testSet1.add("Deneme 9 ");
         
         Future<String> task = executorService.submit(new Echo("Eren"));
 		   try {
@@ -39,7 +52,16 @@ public class Main {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
+		   
+		IMap<Integer, String> testMap = instance.getMap("testMap1");
+		testMap.put(1, "testMap1");
+		testMap.put(2, "testMap2");
 		
+		MultiMap<Integer, String> testMultiMap = instance.getMultiMap("testMultiMap1");
+		testMultiMap.put(1, "TestMultiMap1");
+		testMultiMap.put(1, "TestMultiMap2");
+		testMultiMap.put(2, "TestMultiMap3");
+				
         Hazelcast.shutdownAll();       
         
 	}

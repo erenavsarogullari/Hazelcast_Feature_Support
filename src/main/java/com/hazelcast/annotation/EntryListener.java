@@ -5,13 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hazelcast.common.ItemTypeEnum;
+import com.hazelcast.common.EntryTypeEnum;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface EntryListener {
 
-	ItemTypeEnum type();
-	String distributedObjectName();
-	
+	EntryTypeEnum[] type();
+	String[] distributedObjectName();
+	boolean needsValue() default false;
+
 }

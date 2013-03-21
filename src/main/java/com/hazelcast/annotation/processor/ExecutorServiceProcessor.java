@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import com.hazelcast.annotation.ExecutorService;
 import com.hazelcast.annotation.scanner.HazelcastAnnotationProcessor;
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 
 public class ExecutorServiceProcessor implements HazelcastAnnotationProcessor {
 
@@ -24,7 +25,8 @@ public class ExecutorServiceProcessor implements HazelcastAnnotationProcessor {
 
 		if (executorServiceField != null) {
 			try {
-				java.util.concurrent.ExecutorService executorService = Hazelcast.getDefaultInstance().getExecutorService();
+				HazelcastInstance instance = Hazelcast.getHazelcastInstanceByName("_hzInstance_1_dev");
+				java.util.concurrent.ExecutorService executorService = instance.getExecutorService();
 				executorServiceField.setAccessible(true);
 				executorServiceField.set(clazz.newInstance(), executorService);				
 			} catch (IllegalArgumentException e) {

@@ -11,8 +11,8 @@ import com.hazelcast.common.ItemTypeEnum;
 @Target(ElementType.TYPE)
 public @interface ItemListener {
 
-	ItemTypeEnum type();
-	String distributedObjectName();
+	ItemTypeEnum[] type();
+	String[] distributedObjectName();
 	boolean needsValue() default false;
 	
 }
