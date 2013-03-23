@@ -3,6 +3,7 @@ package com.hazelcast.common;
 import com.hazelcast.annotation.Configuration;
 import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.ExecutorService;
+import com.hazelcast.annotation.IQueue;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.MembershipListener;
 import java.lang.annotation.Annotation;
@@ -22,7 +23,8 @@ public class Annotations {
         ITEM_LISTENER(ItemListener.class),
         ENTRY_LISTENER(EntryListener.class),
         MEMBERSHIP_LISTENER(MembershipListener.class),
-        EXECUTOR_SERVICE(ExecutorService.class);
+        EXECUTOR_SERVICE(ExecutorService.class),
+        IQUEUE(IQueue.class);
         
         private Class<?> clz;
 

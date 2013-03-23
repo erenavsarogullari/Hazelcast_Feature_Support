@@ -5,8 +5,8 @@ import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.ItemEvent;
 
-@ItemListener(distributedObjectName ={ "testList1", "testList2", "testSet1"}, 
-								type = {ItemTypeEnum.LIST, ItemTypeEnum.SET}, 
+@ItemListener(distributedObjectName ={"testList1", "testList2", "testSet1", "testQueue"}, 
+								type = {ItemTypeEnum.LIST, ItemTypeEnum.SET, ItemTypeEnum.QUEUE}, 
 								needsValue=true)
 public class TestItemListener {	
 	

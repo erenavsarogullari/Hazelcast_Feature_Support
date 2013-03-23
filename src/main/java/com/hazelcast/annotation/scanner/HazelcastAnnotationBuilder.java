@@ -17,9 +17,11 @@ import java.util.jar.JarFile;
 
 import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.ExecutorService;
+import com.hazelcast.annotation.IQueue;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.processor.EntryListenerProcessor;
 import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
+import com.hazelcast.annotation.processor.IQueueProcessor;
 import com.hazelcast.annotation.processor.ItemListenerProcessor;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.Annotations.SupportedAnnotation;
@@ -54,6 +56,7 @@ public class HazelcastAnnotationBuilder {
 		
 		//Fields
 		registerAnnotationToProcessor(ExecutorService.class, new ExecutorServiceProcessor());
+		registerAnnotationToProcessor(IQueue.class, new IQueueProcessor());
 		
 		//Types
 		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());

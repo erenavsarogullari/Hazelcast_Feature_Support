@@ -11,7 +11,6 @@ import com.hazelcast.annotation.EntryRemoved;
 import com.hazelcast.annotation.EntryUpdated;
 import com.hazelcast.annotation.scanner.HazelcastAnnotationProcessor;
 import com.hazelcast.common.EntryTypeEnum;
-import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;

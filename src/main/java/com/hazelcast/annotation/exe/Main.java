@@ -12,6 +12,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ISet;
 import com.hazelcast.core.MultiMap;
 
@@ -21,12 +22,18 @@ public class Main {
 	static
 	ExecutorService executorService;
 	
+	@com.hazelcast.annotation.IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue")
+	static IQueue testQueue;
+	
+	@com.hazelcast.annotation.IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue2")
+	static IQueue testQueue2;
+	
 	public static void main(String[] args) {
 		
 		Config cfg = new Config();
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(cfg);
         
-        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
+        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");      
         
         IList<String> testList1 = instance.getList("testList1");
         testList1.add("Deneme 1 " + testList1);
@@ -61,6 +68,12 @@ public class Main {
 		testMultiMap.put(1, "TestMultiMap1");
 		testMultiMap.put(1, "TestMultiMap2");
 		testMultiMap.put(2, "TestMultiMap3");
+		
+		testQueue.add("Erennn welcome");
+        System.out.println("RESULT : " + testQueue.poll().toString());
+        
+        testQueue2.add("Erennn welcome2");
+        System.out.println("RESULT2 : " + testQueue2.poll().toString()); 
 				
         Hazelcast.shutdownAll();       
         
