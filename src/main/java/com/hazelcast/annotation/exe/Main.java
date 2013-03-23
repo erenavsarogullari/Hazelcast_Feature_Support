@@ -40,11 +40,10 @@ public class Main {
 	static com.hazelcast.core.IList testList2;
 	
 	public static void main(String[] args) {
-		
-		Config cfg = new Config();
-        HazelcastInstance instance = Hazelcast.newHazelcastInstance(cfg);
-        
-        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");      
+        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
+
+        HazelcastInstance instance = Hazelcast.getHazelcastInstanceByName("MyHazelcastInstance");
+
         
         testList.add("TestList 1 ");
         testList.add("TestList 2 ");
