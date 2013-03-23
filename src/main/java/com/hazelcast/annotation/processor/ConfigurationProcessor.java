@@ -2,10 +2,11 @@ package com.hazelcast.annotation.processor;
 
 import com.hazelcast.annotation.*;
 import com.hazelcast.annotation.Interfaces;
-import com.hazelcast.annotation.scanner.HazelcastAnnotationProcessor;
+import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.Utilities;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.srv.IHazelcastService;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.HashSet;
  */
 public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     @Override
-    public void process(Class<?> clazz, Annotation annotation) {
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
         Configuration config = (Configuration) annotation;
 
         Config cfg = new Config();

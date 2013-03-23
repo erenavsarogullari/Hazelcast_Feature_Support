@@ -3,7 +3,9 @@ package com.hazelcast.annotation.exe;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import com.hazelcast.annotation.IExecutorService;
+
+import com.hazelcast.annotation.*;
+
 import java.util.concurrent.Future;
 
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
@@ -11,11 +13,9 @@ import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.annotation.IQueue;
-import com.hazelcast.annotation.ISet;
-import com.hazelcast.annotation.IList;
 import com.hazelcast.core.MultiMap;
 
+@Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
 public class Main {
 	
 	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")

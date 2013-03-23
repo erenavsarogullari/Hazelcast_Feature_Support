@@ -11,12 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.hazelcast.annotation.Configuration;
 import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.IList;
 import com.hazelcast.annotation.IQueue;
 import com.hazelcast.annotation.ISet;
 import com.hazelcast.annotation.ItemListener;
+import com.hazelcast.annotation.processor.ConfigurationProcessor;
 import com.hazelcast.annotation.processor.EntryListenerProcessor;
 import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
 import com.hazelcast.annotation.processor.IListProcessor;
@@ -69,6 +71,7 @@ public class HazelcastAnnotationBuilder {
 		registerAnnotationToProcessor(IList.class, new IListProcessor());
 		
 		//Types
+        registerAnnotationToProcessor(Configuration.class, new ConfigurationProcessor());
 		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
 		registerAnnotationToProcessor(EntryListener.class, new EntryListenerProcessor());
 	}
