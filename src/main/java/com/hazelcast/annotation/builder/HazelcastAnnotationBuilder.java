@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
@@ -18,13 +19,7 @@ import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.annotation.listener.ItemListener;
-import com.hazelcast.annotation.processor.ConfigurationProcessor;
-import com.hazelcast.annotation.processor.EntryListenerProcessor;
-import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
-import com.hazelcast.annotation.processor.IListProcessor;
-import com.hazelcast.annotation.processor.IQueueProcessor;
-import com.hazelcast.annotation.processor.ISetProcessor;
-import com.hazelcast.annotation.processor.ItemListenerProcessor;
+import com.hazelcast.annotation.processor.*;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.ClasspathScanEventListener;
 import com.hazelcast.common.ClasspathScanner;
@@ -63,17 +58,11 @@ public class HazelcastAnnotationBuilder {
 	}
 	
 	private static void registerAnnotationsToProcessors() {
-		
-		//Fields
-		registerAnnotationToProcessor(IExecutorService.class, new ExecutorServiceProcessor());
-		registerAnnotationToProcessor(IQueue.class, new IQueueProcessor());
-		registerAnnotationToProcessor(ISet.class, new ISetProcessor());
-		registerAnnotationToProcessor(IList.class, new IListProcessor());
-		
 		//Types
         registerAnnotationToProcessor(Configuration.class, new ConfigurationProcessor());
 		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
 		registerAnnotationToProcessor(EntryListener.class, new EntryListenerProcessor());
+        registerAnnotationToProcessor(HazelcastAware.class, new HazelcastAwareProcessor());
 	}
 
     private static void registerAnnotationToProcessor(Class<?> clazz, HazelcastAnnotationProcessor processor) {

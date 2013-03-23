@@ -1,5 +1,6 @@
 package com.hazelcast.common;
 
+import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
@@ -26,41 +27,77 @@ import java.util.List;
 public class Annotations {
 
     public enum SupportedAnnotation {
-    	
-        CONFIGURATION(Configuration.class), 
+
+        CONFIGURATION(Configuration.class),
+        HAZELCASTAWAR(HazelcastAware.class),
         ITEM_LISTENER(ItemListener.class),
         ENTRY_LISTENER(EntryListener.class),
-        MEMBERSHIP_LISTENER(MembershipListener.class),
-        EXECUTOR_SERVICE(IExecutorService.class),
-        IQUEUE(IQueue.class),
-        ISET(ISet.class),
-        ILIST(IList.class);
-        
+        MEMBERSHIP_LISTENER(MembershipListener.class);
+
         private Class<?> clz;
 
         SupportedAnnotation(Class<?> clz) {
             this.clz = clz;
         }
-        
+
         public Class<?> getClassType(){
             return clz;
         }
-        
+
         public static List<SupportedAnnotation> getSupportedAnnotations(Class<?> clz){
             Annotation[] clzAnnotations = clz.getAnnotations();
             List<SupportedAnnotation> supportedAnnotationList = new ArrayList<SupportedAnnotation>();
-            
+
             if( clzAnnotations != null ){
-            	addSupportedAnnotationToList(clzAnnotations, supportedAnnotationList);
+                addSupportedAnnotationToList(clzAnnotations, supportedAnnotationList);
             }
-            
+
             Field[] fields = clz.getDeclaredFields();
             if( fields.length > 0){
-            	for(Field field : fields) {            		
-            		addSupportedAnnotationToList(field.getDeclaredAnnotations(), supportedAnnotationList);
-            	}            	
+                for(Field field : fields) {
+                    addSupportedAnnotationToList(field.getDeclaredAnnotations(), supportedAnnotationList);
+                }
             }
-            
+
+            return supportedAnnotationList;
+        }
+    }
+
+    public enum SupportedFieldAnnotation {
+
+        EXECUTOR_SERVICE(IExecutorService.class),
+        IQUEUE(IQueue.class),
+        ISET(ISet.class),
+        ILIST(IList.class);
+
+        private Class<?> clz;
+
+        SupportedFieldAnnotation(Class<?> clz) {
+            this.clz = clz;
+        }
+
+        public Class<?> getClassType(){
+            return clz;
+        }
+
+        public static List<AnnotationField> getSupportedAnnotations(Class<?> clz){
+            List<AnnotationField> supportedAnnotationList = new ArrayList<AnnotationField>();
+
+            Field[] fields = clz.getDeclaredFields();
+            if( fields.length > 0){
+                for(Field field : fields) {
+                    for( Annotation annotation : field.getDeclaredAnnotations() ){
+                        for( SupportedFieldAnnotation supportedAnnotation : SupportedFieldAnnotation.values() ){
+                            if( supportedAnnotation.getClassType() == annotation.annotationType() ){
+                                supportedAnnotationList.add(new AnnotationField(supportedAnnotation, field, annotation));
+                                break;
+                            }
+                        }
+                    }
+
+                }
+            }
+
             return supportedAnnotationList;
         }
     }

@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.core.HazelcastInstance;
@@ -18,37 +19,27 @@ import com.hazelcast.srv.IHazelcastService;
  * @version 1.0.0
  *
  */
-public class IQueueProcessor implements HazelcastAnnotationProcessor {
+public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
 
-	@Override
-	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-		for (Field field : clazz.getDeclaredFields()) {
-			Annotation[] annotations = field.getAnnotations();
-			for (Annotation tempAnnotation : annotations) {
-				if (tempAnnotation.annotationType() == IQueue.class) {
-					processDistributedQueue(hazelcastService, clazz, (IQueue)tempAnnotation, field);
-				} 
-			}
-		}
-	}
-	
-	private void processDistributedQueue(IHazelcastService hazelcastService, Class<?> clazz, IQueue annotation, Field distributedQueueField) {
-		try {
-			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-			for(HazelcastInstance instance : hazelcastInstances) {
-				com.hazelcast.core.IQueue<Object> distributedQueue = instance.getQueue(annotation.name());
-				if(distributedQueue != null) {
-					distributedQueueField.setAccessible(true);
-					distributedQueueField.set(clazz.newInstance(), distributedQueue);					
-				}
-			}						
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+        IQueue queueAnnotation = (IQueue) annotation;
 
+        try {
+            Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
+            for(HazelcastInstance instance : hazelcastInstances) {
+                com.hazelcast.core.IQueue<Object> distributedQueue = instance.getQueue(queueAnnotation.name());
+                if(distributedQueue != null) {
+                    field.setAccessible(true);
+                    field.set(clazz.newInstance(), distributedQueue);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
 }

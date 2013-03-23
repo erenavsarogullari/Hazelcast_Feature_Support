@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.core.HazelcastInstance;
@@ -18,35 +19,25 @@ import com.hazelcast.srv.IHazelcastService;
  * @version 1.0.0
  *
  */
-public class IListProcessor implements HazelcastAnnotationProcessor {
+public class IListProcessor implements HazelcastFieldAnnotationProcessor {
 
-	@Override
-	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-		for (Field field : clazz.getDeclaredFields()) {
-			Annotation[] annotations = field.getAnnotations();
-			for (Annotation tempAnnotation : annotations) {
-				if (tempAnnotation.annotationType() == IList.class) {
-					processDistributedList(hazelcastService, clazz, (IList)tempAnnotation, field);
-				} 
-			}
-		}
-	}
-	
-	private void processDistributedList(IHazelcastService hazelcastService, Class<?> clazz, IList annotation, Field distributedListField) {
-		try {
-			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-			for(HazelcastInstance instance : hazelcastInstances) {
-				com.hazelcast.core.IList<Object> distributedList = instance.getList(annotation.name());
-				distributedListField.setAccessible(true);
-				distributedListField.set(clazz.newInstance(), distributedList);	
-			}						
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+        IList listAnnotation = (IList) annotation;
 
+        try {
+            Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
+            for(HazelcastInstance instance : hazelcastInstances) {
+                com.hazelcast.core.IList<Object> distributedList = instance.getList(listAnnotation.name());
+                field.setAccessible(true);
+                field.set(clazz.newInstance(), distributedList);
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
 }

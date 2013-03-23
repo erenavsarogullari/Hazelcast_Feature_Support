@@ -19,6 +19,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
 
 @Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
+@HazelcastAware
 public class Main {
 	
 	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
