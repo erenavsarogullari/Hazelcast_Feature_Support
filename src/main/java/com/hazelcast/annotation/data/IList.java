@@ -1,12 +1,12 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.data;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast MemberAdded Annotation Interface
+ * Hazelcast IList Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -15,7 +15,9 @@ import java.lang.annotation.ElementType;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface MemberAdded {
+@Target(ElementType.FIELD)
+public @interface IList {
 
+	String name();
+	
 }

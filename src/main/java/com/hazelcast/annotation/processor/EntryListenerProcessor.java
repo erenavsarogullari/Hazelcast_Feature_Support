@@ -4,11 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import com.hazelcast.annotation.EntryAdded;
-import com.hazelcast.annotation.EntryEvicted;
-import com.hazelcast.annotation.EntryListener;
-import com.hazelcast.annotation.EntryRemoved;
-import com.hazelcast.annotation.EntryUpdated;
+import com.hazelcast.annotation.listener.EntryAdded;
+import com.hazelcast.annotation.listener.EntryEvicted;
+import com.hazelcast.annotation.listener.EntryListener;
+import com.hazelcast.annotation.listener.EntryRemoved;
+import com.hazelcast.annotation.listener.EntryUpdated;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.EntryTypeEnum;
 import com.hazelcast.core.HazelcastInstance;

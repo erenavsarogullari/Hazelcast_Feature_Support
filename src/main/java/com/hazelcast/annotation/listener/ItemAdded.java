@@ -1,12 +1,12 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast IQueue Annotation Interface
+ * Hazelcast ItemAdded Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -15,11 +15,7 @@ import java.lang.annotation.Target;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface MultiMap {
+@Target(ElementType.METHOD)
+public @interface ItemAdded {
 
-	String name();
-	int maxSizePerJvm();
-	int backingMapRef();
-	
 }

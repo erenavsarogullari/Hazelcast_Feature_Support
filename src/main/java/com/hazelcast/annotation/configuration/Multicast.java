@@ -1,4 +1,4 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.configuration;
 
 import com.hazelcast.config.MulticastConfig;
 

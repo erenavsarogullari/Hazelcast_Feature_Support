@@ -1,4 +1,4 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast ItemRemoved Annotation Interface
+ * Hazelcast InstanceDestroyed Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -14,8 +14,8 @@ import java.lang.annotation.ElementType;
  * @version 1.0.0
  *
  */
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ItemRemoved {
+public @interface InstanceDestroyed {
 
 }

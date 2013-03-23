@@ -1,4 +1,4 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.configuration;
 
 /**
  * Date: 22/03/2013 17:43

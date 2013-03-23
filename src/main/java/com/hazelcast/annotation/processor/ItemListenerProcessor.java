@@ -4,9 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import com.hazelcast.annotation.ItemAdded;
-import com.hazelcast.annotation.ItemListener;
-import com.hazelcast.annotation.ItemRemoved;
+import com.hazelcast.annotation.listener.ItemAdded;
+import com.hazelcast.annotation.listener.ItemListener;
+import com.hazelcast.annotation.listener.ItemRemoved;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.HazelcastInstance;

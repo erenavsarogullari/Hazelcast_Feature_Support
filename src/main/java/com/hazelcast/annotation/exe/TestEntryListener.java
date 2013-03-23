@@ -1,8 +1,8 @@
 package com.hazelcast.annotation.exe;
 
-import com.hazelcast.annotation.EntryAdded;
-import com.hazelcast.annotation.EntryListener;
-import com.hazelcast.annotation.EntryRemoved;
+import com.hazelcast.annotation.listener.EntryAdded;
+import com.hazelcast.annotation.listener.EntryListener;
+import com.hazelcast.annotation.listener.EntryRemoved;
 import com.hazelcast.common.EntryTypeEnum;
 import com.hazelcast.core.EntryEvent;
 
@@ -15,8 +15,8 @@ import com.hazelcast.core.EntryEvent;
  * @version 1.0.0
  *
  */
-@EntryListener(distributedObjectName = {"testMap1", "testMultiMap1"}, 
-								type = {EntryTypeEnum.MAP, EntryTypeEnum.MULTI_MAP}, 
+@EntryListener(distributedObjectName = {"testMap1", "testMultiMap1"},
+								type = {EntryTypeEnum.MAP, EntryTypeEnum.MULTI_MAP},
 								needsValue=true)
 public class TestEntryListener {	
 	

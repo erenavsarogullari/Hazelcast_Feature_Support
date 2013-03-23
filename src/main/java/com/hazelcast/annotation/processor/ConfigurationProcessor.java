@@ -1,8 +1,7 @@
 package com.hazelcast.annotation.processor;
 
-import com.hazelcast.annotation.*;
-import com.hazelcast.annotation.Interfaces;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
+import com.hazelcast.annotation.configuration.*;
 import com.hazelcast.common.Utilities;
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
@@ -117,7 +116,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         }
     }
 
-    private void setInterfacesConfig(NetworkConfig nwConfig, Interfaces interfaces ){
+    private void setInterfacesConfig(NetworkConfig nwConfig, com.hazelcast.annotation.configuration.Interfaces interfaces ){
 
     }
 }

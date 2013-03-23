@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
-import com.hazelcast.annotation.*;
-
 import java.util.concurrent.Future;
 
+import com.hazelcast.annotation.*;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
-import com.hazelcast.config.Config;
+import com.hazelcast.annotation.configuration.Configuration;
+import com.hazelcast.annotation.configuration.Multicast;
+import com.hazelcast.annotation.data.IList;
+import com.hazelcast.annotation.data.IQueue;
+import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;

@@ -1,4 +1,4 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,12 +1,14 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hazelcast.common.EntryTypeEnum;
+
 /**
- * Hazelcast InstanceListener Annotation Interface
+ * Hazelcast EntryListener Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -16,8 +18,10 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface InstanceListener {
+public @interface EntryListener {
 
-	String instanceName();
-	
+	EntryTypeEnum[] type();
+	String[] distributedObjectName();
+	boolean needsValue() default false;
+
 }

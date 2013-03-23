@@ -1,12 +1,12 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast ItemAdded Annotation Interface
+ * Hazelcast MembershipListener Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -15,7 +15,7 @@ import java.lang.annotation.ElementType;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ItemAdded {
-
+@Target(ElementType.TYPE)
+public @interface MembershipListener {
+	
 }

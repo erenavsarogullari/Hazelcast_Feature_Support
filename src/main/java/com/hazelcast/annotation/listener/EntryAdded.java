@@ -1,4 +1,4 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast EntryUpdated Annotation Interface
+ * Hazelcast EntryAdded Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -16,6 +16,6 @@ import java.lang.annotation.ElementType;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface EntryUpdated {
+public @interface EntryAdded {
 
 }

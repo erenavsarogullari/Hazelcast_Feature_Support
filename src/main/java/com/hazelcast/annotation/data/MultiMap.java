@@ -1,14 +1,12 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.data;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hazelcast.common.EntryTypeEnum;
-
 /**
- * Hazelcast EntryListener Annotation Interface
+ * Hazelcast IQueue Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -17,11 +15,11 @@ import com.hazelcast.common.EntryTypeEnum;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface EntryListener {
+@Target(ElementType.FIELD)
+public @interface MultiMap {
 
-	EntryTypeEnum[] type();
-	String[] distributedObjectName();
-	boolean needsValue() default false;
-
+	String name();
+	int maxSizePerJvm();
+	int backingMapRef();
+	
 }

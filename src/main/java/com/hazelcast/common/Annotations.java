@@ -1,13 +1,14 @@
 package com.hazelcast.common;
 
-import com.hazelcast.annotation.Configuration;
-import com.hazelcast.annotation.EntryListener;
+import com.hazelcast.annotation.configuration.Configuration;
+import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
-import com.hazelcast.annotation.IList;
-import com.hazelcast.annotation.IQueue;
-import com.hazelcast.annotation.ISet;
-import com.hazelcast.annotation.ItemListener;
-import com.hazelcast.annotation.MembershipListener;
+import com.hazelcast.annotation.data.IList;
+import com.hazelcast.annotation.data.IQueue;
+import com.hazelcast.annotation.data.ISet;
+import com.hazelcast.annotation.listener.ItemListener;
+import com.hazelcast.annotation.listener.MembershipListener;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

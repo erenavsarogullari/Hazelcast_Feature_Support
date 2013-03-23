@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import com.hazelcast.annotation.ISet;
+import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;

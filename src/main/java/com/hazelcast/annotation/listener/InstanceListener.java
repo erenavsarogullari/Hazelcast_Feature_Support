@@ -1,12 +1,12 @@
-package com.hazelcast.annotation;
+package com.hazelcast.annotation.listener;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast InstanceDestroyed Annotation Interface
+ * Hazelcast InstanceListener Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -15,7 +15,9 @@ import java.lang.annotation.ElementType;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface InstanceDestroyed {
+@Target(ElementType.TYPE)
+public @interface InstanceListener {
 
+	String instanceName();
+	
 }
