@@ -1,5 +1,14 @@
 package com.hazelcast.common;
 
+/**
+ * Hazelcast EntryTypeEnums
+ *
+ * @author Eren Avsarogullari
+ * @author Yusuf Soysal
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 public enum EntryTypeEnum {
 
 	MAP("MAP"), 

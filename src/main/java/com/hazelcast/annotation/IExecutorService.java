@@ -1,12 +1,12 @@
 package com.hazelcast.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
 
 /**
- * Hazelcast EntryEvicted Annotation Interface
+ * Hazelcast IExecutorService Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -15,7 +15,12 @@ import java.lang.annotation.ElementType;
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface EntryEvicted {
+@Target(ElementType.FIELD)
+public @interface IExecutorService {
 
+	String name();
+	int corePoolSize();
+	int maxPoolSize();
+	int keepAliveSeconds();
+	
 }

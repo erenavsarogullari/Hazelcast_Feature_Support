@@ -7,19 +7,28 @@ import java.util.Set;
 import com.hazelcast.annotation.ItemAdded;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.ItemRemoved;
-import com.hazelcast.annotation.scanner.HazelcastAnnotationProcessor;
+import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.ItemTypeEnum;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ISet;
 import com.hazelcast.listener.proxy.ItemListenerProxy;
+import com.hazelcast.srv.IHazelcastService;
 
+/**
+ * Hazelcast ItemListener Annotation Interface
+ *
+ * @author Yusuf Soysal
+ * @author Eren Avsarogullari
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 
 	@Override
-	public void process(Class<?> clazz, Annotation annotation) {
+	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
 		Method itemAdded = null, itemRemoved = null;
 		int numberOfMethods = 0;
 
@@ -37,18 +46,18 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 		}
 
 		if (numberOfMethods > 0) {
-			addItemListener(clazz, annotation, itemAdded, itemRemoved);
+			addItemListener(hazelcastService, clazz, annotation, itemAdded, itemRemoved);
 		}
 
 	}
 	
-	private void addItemListener(Class<?> clazz, Annotation annotation, Method itemAdded, Method itemRemoved) {
+	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		
 		ItemListenerProxy itemListenerProxy = null;
 		
 		try {
 
-			Set<HazelcastInstance> allHazelcastInstances = Hazelcast.getAllHazelcastInstances();
+			Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 
 			ItemListener listener = (ItemListener) annotation;
 			

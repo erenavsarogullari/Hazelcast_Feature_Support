@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Hazelcast Configuration Annotation Interface
+ * Hazelcast IList Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -16,6 +16,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Configuration {
+public @interface IList {
 
+	String name();
+	
 }

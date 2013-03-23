@@ -7,6 +7,15 @@ import java.lang.annotation.Target;
 
 import com.hazelcast.common.EntryTypeEnum;
 
+/**
+ * Hazelcast EntryListener Annotation Interface
+ *
+ * @author Eren Avsarogullari
+ * @author Yusuf Soysal
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface EntryListener {
