@@ -10,6 +10,7 @@ import com.hazelcast.annotation.*;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
+import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
@@ -42,13 +43,16 @@ public class Main {
 	
 	@IList(name = "testList2")
 	static com.hazelcast.core.IList testList2;
+
+    @HZInstance("MyHazelcastInstance")
+    static HazelcastInstance instance;
 	
 	public static void main(String[] args) {
         HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
 
-        HazelcastInstance instance = Hazelcast.getHazelcastInstanceByName("MyHazelcastInstance");
+        // think about this
+        // HZAware.initialize(new Main());
 
-        
         testList.add("TestList 1 ");
         testList.add("TestList 2 ");
         testList.add("TestList 3 ");

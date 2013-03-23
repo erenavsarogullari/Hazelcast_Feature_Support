@@ -3,12 +3,10 @@ package com.hazelcast.annotation.processor;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
-import com.hazelcast.annotation.configuration.Configuration;
+import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
-import com.hazelcast.annotation.listener.EntryListener;
-import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.common.AnnotationField;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.srv.IHazelcastService;
@@ -44,6 +42,7 @@ public class HazelcastAwareProcessor implements HazelcastAnnotationProcessor {
 
     private static void registerAnnotationsToProcessors() {
         //Fields
+        registerAnnotationToProcessor(HZInstance.class, new HZInstanceProcessor());
         registerAnnotationToProcessor(IExecutorService.class, new ExecutorServiceProcessor());
         registerAnnotationToProcessor(IQueue.class, new IQueueProcessor());
         registerAnnotationToProcessor(ISet.class, new ISetProcessor());

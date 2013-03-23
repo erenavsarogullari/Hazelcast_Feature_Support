@@ -2,6 +2,7 @@ package com.hazelcast.common;
 
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.configuration.Configuration;
+import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.data.IList;
@@ -65,6 +66,7 @@ public class Annotations {
 
     public enum SupportedFieldAnnotation {
 
+        HZ_INSTANCE(HZInstance.class),
         EXECUTOR_SERVICE(IExecutorService.class),
         IQUEUE(IQueue.class),
         ISET(ISet.class),
