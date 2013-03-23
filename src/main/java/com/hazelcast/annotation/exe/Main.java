@@ -3,45 +3,72 @@ package com.hazelcast.annotation.exe;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import com.hazelcast.annotation.IExecutorService;
 import java.util.concurrent.Future;
 
-import com.hazelcast.annotation.scanner.HazelcastAnnotationBuilder;
+import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.ISet;
+import com.hazelcast.annotation.IQueue;
+import com.hazelcast.annotation.ISet;
+import com.hazelcast.annotation.IList;
 import com.hazelcast.core.MultiMap;
 
 public class Main {
 	
-	@com.hazelcast.annotation.ExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
-	static
-	ExecutorService executorService;
+	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
+	static java.util.concurrent.ExecutorService executorService;
+	
+	@IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue")
+	static com.hazelcast.core.IQueue testQueue;
+	
+	@IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue2")
+	static com.hazelcast.core.IQueue testQueue2;
+	
+	@ISet(name = "testSet")
+	static com.hazelcast.core.ISet testSet;
+	
+	@ISet(name = "testSet2")
+	static com.hazelcast.core.ISet testSet2;
+	
+	@IList(name = "testList")
+	static com.hazelcast.core.IList testList;
+	
+	@IList(name = "testList2")
+	static com.hazelcast.core.IList testList2;
 	
 	public static void main(String[] args) {
 		
 		Config cfg = new Config();
         HazelcastInstance instance = Hazelcast.newHazelcastInstance(cfg);
         
-        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
+        HazelcastAnnotationBuilder.build("com.hazelcast.annotation");      
         
-        IList<String> testList1 = instance.getList("testList1");
-        testList1.add("Deneme 1 " + testList1);
-        testList1.add("Deneme 2 ");
-        testList1.add("Deneme 3 ");
+        testList.add("TestList 1 ");
+        testList.add("TestList 2 ");
+        testList.add("TestList 3 ");
         
-        IList<String> testList2 = instance.getList("testList2");
-        testList2.add("Deneme 4 " + testList2);
-        testList2.add("Deneme 5 ");
-        testList2.add("Deneme 6 ");
+        testList2.add("TestList2 4 ");
+        testList2.add("TestList2 5 ");
+        testList2.add("TestList2 6 ");
+                
+        IMap<Integer, String> testMap = instance.getMap("testMap1");
+		testMap.put(1, "testMap1");
+		testMap.put(2, "testMap2");
+		
+		MultiMap<Integer, String> testMultiMap = instance.getMultiMap("testMultiMap1");
+		testMultiMap.put(1, "TestMultiMap1");
+		testMultiMap.put(1, "TestMultiMap2");
+		testMultiMap.put(2, "TestMultiMap3");
+		
+		testQueue.add("Test Queue");
+        testQueue2.add("Test Queue2");
         
-        ISet<String> testSet1 = instance.getSet("testSet1");
-        testSet1.add("Deneme 7 " + testSet1);
-        testSet1.add("Deneme 8 ");
-        testSet1.add("Deneme 9 ");
+        testSet.add("Test Set");
+        testSet2.add("Test Set2");
+        
         
         Future<String> task = executorService.submit(new Echo("Eren"));
 		   try {
@@ -51,17 +78,8 @@ public class Main {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-		}
-		   
-		IMap<Integer, String> testMap = instance.getMap("testMap1");
-		testMap.put(1, "testMap1");
-		testMap.put(2, "testMap2");
-		
-		MultiMap<Integer, String> testMultiMap = instance.getMultiMap("testMultiMap1");
-		testMultiMap.put(1, "TestMultiMap1");
-		testMultiMap.put(1, "TestMultiMap2");
-		testMultiMap.put(2, "TestMultiMap3");
-				
+		}		 
+        
         Hazelcast.shutdownAll();       
         
 	}

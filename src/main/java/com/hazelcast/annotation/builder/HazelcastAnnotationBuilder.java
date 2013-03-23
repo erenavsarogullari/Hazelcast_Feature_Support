@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.hazelcast.annotation.scanner;
+package com.hazelcast.annotation.builder;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,24 +12,38 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.hazelcast.annotation.EntryListener;
-import com.hazelcast.annotation.ExecutorService;
+import com.hazelcast.annotation.IExecutorService;
+import com.hazelcast.annotation.IList;
+import com.hazelcast.annotation.IQueue;
+import com.hazelcast.annotation.ISet;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.processor.EntryListenerProcessor;
 import com.hazelcast.annotation.processor.ExecutorServiceProcessor;
+import com.hazelcast.annotation.processor.IListProcessor;
+import com.hazelcast.annotation.processor.IQueueProcessor;
+import com.hazelcast.annotation.processor.ISetProcessor;
 import com.hazelcast.annotation.processor.ItemListenerProcessor;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.Annotations.SupportedAnnotation;
 import com.hazelcast.common.SystemConstants;
+import com.hazelcast.srv.HazelcastService;
+import com.hazelcast.srv.IHazelcastService;
 
 /**
+ * Hazelcast Annotation Builder
  *
- * @author yusufsoysal
+ * @author Yusuf Soysal
+ * @author Eren Avsarogullari
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
  */
 public class HazelcastAnnotationBuilder {
 
     private static ClassLoader currentCL;
     private static Map<Class<?>, List<HazelcastAnnotationProcessor>> processorMap = new ConcurrentHashMap<Class<?>, List<HazelcastAnnotationProcessor>>();
     private static Map<SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentHashMap<SupportedAnnotation, List<Class<?>>>();
+    private static IHazelcastService hazelcastService = new HazelcastService();
     
     static {
         init();
@@ -53,7 +63,10 @@ public class HazelcastAnnotationBuilder {
 	private static void registerAnnotationsToProcessors() {
 		
 		//Fields
-		registerAnnotationToProcessor(ExecutorService.class, new ExecutorServiceProcessor());
+		registerAnnotationToProcessor(IExecutorService.class, new ExecutorServiceProcessor());
+		registerAnnotationToProcessor(IQueue.class, new IQueueProcessor());
+		registerAnnotationToProcessor(ISet.class, new ISetProcessor());
+		registerAnnotationToProcessor(IList.class, new IListProcessor());
 		
 		//Types
 		registerAnnotationToProcessor(ItemListener.class, new ItemListenerProcessor());
@@ -65,14 +78,15 @@ public class HazelcastAnnotationBuilder {
     }
     
     private static void fireEvents() {
-        for (SupportedAnnotation supportedAnnotation : Annotations.SupportedAnnotation.values()) {
+    	
+    	for (SupportedAnnotation supportedAnnotation : Annotations.SupportedAnnotation.values()) {
             List<Class<?>> clazzListOfSupportedAnnotation = classMap.get(supportedAnnotation);
 
             if (clazzListOfSupportedAnnotation != null) {
                 for (Class<?> clazz : clazzListOfSupportedAnnotation) {
                     List<HazelcastAnnotationProcessor> processorListOfSupportedAnnotation = processorMap.get(supportedAnnotation.getClassType());
                     for (HazelcastAnnotationProcessor processor : processorListOfSupportedAnnotation) {
-                        processor.process(clazz, clazz.getAnnotation((Class)supportedAnnotation.getClassType()));
+                        processor.process(hazelcastService, clazz, clazz.getAnnotation((Class)supportedAnnotation.getClassType()));
                     }
                 }
             }

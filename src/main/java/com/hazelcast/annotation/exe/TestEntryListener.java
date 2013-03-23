@@ -6,10 +6,18 @@ import com.hazelcast.annotation.EntryRemoved;
 import com.hazelcast.common.EntryTypeEnum;
 import com.hazelcast.core.EntryEvent;
 
+/**
+ * Test Entry Listener Class
+ *
+ * @author Eren Avsarogullari
+ * @author Yusuf Soysal
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 @EntryListener(distributedObjectName = {"testMap1", "testMultiMap1"}, 
 								type = {EntryTypeEnum.MAP, EntryTypeEnum.MULTI_MAP}, 
 								needsValue=true)
-
 public class TestEntryListener {	
 	
 	@EntryAdded

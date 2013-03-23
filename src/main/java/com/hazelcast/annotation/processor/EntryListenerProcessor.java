@@ -9,19 +9,27 @@ import com.hazelcast.annotation.EntryEvicted;
 import com.hazelcast.annotation.EntryListener;
 import com.hazelcast.annotation.EntryRemoved;
 import com.hazelcast.annotation.EntryUpdated;
-import com.hazelcast.annotation.scanner.HazelcastAnnotationProcessor;
+import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.EntryTypeEnum;
-import com.hazelcast.common.ItemTypeEnum;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
 import com.hazelcast.listener.proxy.EntryListenerProxy;
+import com.hazelcast.srv.IHazelcastService;
 
+/**
+ * Hazelcast EntryListener Annotation Processor
+ *
+ * @author Eren Avsarogullari
+ * @author Yusuf Soysal
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
 
 	@Override
-	public void process(Class<?> clazz, Annotation annotation) {
+	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
 		Method entryAdded = null, entryRemoved = null, entryUpdated = null, entryEvicted = null;
 		int numberOfMethods = 0;
 
@@ -45,16 +53,16 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
 		}
 
 		if (numberOfMethods > 0) {
-			addEntryListener(clazz, annotation, entryAdded, entryRemoved, entryUpdated, entryEvicted);
+			addEntryListener(hazelcastService, clazz, annotation, entryAdded, entryRemoved, entryUpdated, entryEvicted);
 		}
 
 	}
 	
-	private void addEntryListener(Class<?> clazz, Annotation annotation, Method entryAdded, Method entryRemoved, Method entryUpdated, Method entryEvicted) {
+	private void addEntryListener(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation, Method entryAdded, Method entryRemoved, Method entryUpdated, Method entryEvicted) {
 		String[] distributedObjectNames = null;
 		EntryListenerProxy entryListenerProxy = null;
 		try {
-			Set<HazelcastInstance> allHazelcastInstances = Hazelcast.getAllHazelcastInstances();
+			Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 			
 			EntryListener listener = (EntryListener) annotation;
 			

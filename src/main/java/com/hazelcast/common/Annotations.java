@@ -2,7 +2,10 @@ package com.hazelcast.common;
 
 import com.hazelcast.annotation.Configuration;
 import com.hazelcast.annotation.EntryListener;
-import com.hazelcast.annotation.ExecutorService;
+import com.hazelcast.annotation.IExecutorService;
+import com.hazelcast.annotation.IList;
+import com.hazelcast.annotation.IQueue;
+import com.hazelcast.annotation.ISet;
 import com.hazelcast.annotation.ItemListener;
 import com.hazelcast.annotation.MembershipListener;
 import java.lang.annotation.Annotation;
@@ -11,8 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Hazelcast Annotations Class
  *
- * @author yusufsoysal
+ * @author Yusuf Soysal
+ * @author Eren Avsarogullari
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
  */
 public class Annotations {
 
@@ -22,7 +30,10 @@ public class Annotations {
         ITEM_LISTENER(ItemListener.class),
         ENTRY_LISTENER(EntryListener.class),
         MEMBERSHIP_LISTENER(MembershipListener.class),
-        EXECUTOR_SERVICE(ExecutorService.class);
+        EXECUTOR_SERVICE(IExecutorService.class),
+        IQUEUE(IQueue.class),
+        ISET(ISet.class),
+        ILIST(IList.class);
         
         private Class<?> clz;
 

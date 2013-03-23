@@ -6,6 +6,15 @@ import java.lang.reflect.Method;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
 
+/**
+ * Hazelcast EntryListener Proxy
+ *
+ * @author Yusuf Soysal
+ * @author Eren Avsarogullari
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 public class EntryListenerProxy implements EntryListener {
 
 	private Object target;

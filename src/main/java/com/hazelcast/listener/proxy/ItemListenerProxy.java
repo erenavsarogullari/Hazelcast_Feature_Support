@@ -6,6 +6,15 @@ import java.lang.reflect.Method;
 import com.hazelcast.core.ItemEvent;
 import com.hazelcast.core.ItemListener;
 
+/**
+ * Hazelcast ItemListener Proxy
+ *
+ * @author Yusuf Soysal
+ * @author Eren Avsarogullari
+ * @since 17 March 2013
+ * @version 1.0.0
+ *
+ */
 public class ItemListenerProxy implements ItemListener {
 
 	private Object target;
