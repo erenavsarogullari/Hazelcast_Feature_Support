@@ -46,6 +46,19 @@ public class HazelcastAnnotationBuilder {
         init();
     }
 
+    public static void build(String packageName) {
+        ClasspathScanner.scanClasspathForPackage(packageName, new ClasspathScannerImpl());
+        fireEvents();
+    }
+
+    public static void parseObjectAnnotations(Object obj){
+        List<Annotations.SupportedAnnotation> supportedAnnotationsList = Annotations.SupportedAnnotation.getSupportedAnnotations(obj.getClass());
+        if (supportedAnnotationsList.size() > 0) {
+
+            fireEventsForObject(obj,supportedAnnotationsList);
+        }
+    }
+
     private static void init() {
         loadProcessorMap();        
         registerAnnotationsToProcessors();
@@ -76,18 +89,35 @@ public class HazelcastAnnotationBuilder {
 
             if (clazzListOfSupportedAnnotation != null) {
                 for (Class<?> clazz : clazzListOfSupportedAnnotation) {
+                    boolean eligible = HZAware.eligibleForParsing(clazz);
+
                     List<HazelcastAnnotationProcessor> processorListOfSupportedAnnotation = processorMap.get(supportedAnnotation.getClassType());
                     for (HazelcastAnnotationProcessor processor : processorListOfSupportedAnnotation) {
-                        processor.process(hazelcastService, clazz, clazz.getAnnotation((Class)supportedAnnotation.getClassType()));
+                        if( eligible || (!eligible && processor.canBeProcessedMoreThanOnce()) ){
+                            processor.process(hazelcastService, clazz, clazz.getAnnotation((Class)supportedAnnotation.getClassType()));
+                        }
                     }
+
+                    HZAware.classParsed(clazz);
                 }
             }
         }
     }
-    
-    public static void build(String packageName) {
-        ClasspathScanner.scanClasspathForPackage(packageName, new ClasspathScannerImpl());
-        fireEvents();
+
+    private static void fireEventsForObject(Object obj, List<Annotations.SupportedAnnotation> supportedAnnotationsList){
+        boolean eligible = HZAware.eligibleForParsing(obj.getClass());
+
+        for(Annotations.SupportedAnnotation annotation : supportedAnnotationsList){
+            List<HazelcastAnnotationProcessor> processorListOfSupportedAnnotation = processorMap.get(annotation.getClassType());
+            for (HazelcastAnnotationProcessor processor : processorListOfSupportedAnnotation) {
+
+                if( eligible || (!eligible && processor.canBeProcessedMoreThanOnce()) ){
+                    processor.process(hazelcastService, obj, obj.getClass().getAnnotation((Class) annotation.getClassType()));
+                }
+            }
+        }
+
+        HZAware.classParsed(obj.getClass());
     }
 
     public static class ClasspathScannerImpl implements ClasspathScanEventListener{

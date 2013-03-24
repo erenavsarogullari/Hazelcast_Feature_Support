@@ -14,8 +14,11 @@ import com.hazelcast.srv.IHazelcastService;
  *
  */
 public interface HazelcastAnnotationProcessor {
-    
+
+    boolean canBeProcessedMoreThanOnce();
 	
     void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation);
+
+    void process(IHazelcastService hazelcastService, Object obj, Annotation annotation);
     
 }

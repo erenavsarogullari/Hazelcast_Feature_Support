@@ -22,7 +22,7 @@ import com.hazelcast.srv.IHazelcastService;
 public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+    public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
         IQueue queueAnnotation = (IQueue) annotation;
 
         try {
@@ -31,14 +31,12 @@ public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
                 com.hazelcast.core.IQueue<Object> distributedQueue = instance.getQueue(queueAnnotation.name());
                 if(distributedQueue != null) {
                     field.setAccessible(true);
-                    field.set(clazz.newInstance(), distributedQueue);
+                    field.set(obj, distributedQueue);
                 }
             }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
     }

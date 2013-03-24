@@ -27,35 +27,52 @@ import com.hazelcast.srv.IHazelcastService;
  */
 public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 
-	@Override
+    @Override
+    public boolean canBeProcessedMoreThanOnce() {
+        return false;
+    }
+
+    @Override
+    public void process(IHazelcastService hazelcastService, Object obj, Annotation annotation) {
+        createItemListener(hazelcastService, obj.getClass(), obj, annotation);
+    }
+
+    @Override
 	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-		Method itemAdded = null, itemRemoved = null;
-		int numberOfMethods = 0;
-
-		for (Method method : clazz.getMethods()) {
-			Annotation[] annotations = method.getAnnotations();
-			for (Annotation tempAnnotation : annotations) {
-				if (tempAnnotation.annotationType() == ItemListenerEnum.ITEM_ADDED.getItemType()) {
-					itemAdded = method;
-					++numberOfMethods;
-				} else if (tempAnnotation.annotationType() == ItemListenerEnum.ITEM_REMOVED.getItemType()) {
-					itemRemoved = method;
-					++numberOfMethods;
-				}
-			}
-		}
-
-		if (numberOfMethods > 0) {
-			addItemListener(hazelcastService, clazz, annotation, itemAdded, itemRemoved);
-		}
-
+        createItemListener(hazelcastService, clazz, null, annotation);
 	}
+
+    private void createItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation){
+        Method itemAdded = null, itemRemoved = null;
+        int numberOfMethods = 0;
+
+        for (Method method : clazz.getMethods()) {
+            Annotation[] annotations = method.getAnnotations();
+            for (Annotation tempAnnotation : annotations) {
+                if (tempAnnotation.annotationType() == ItemListenerEnum.ITEM_ADDED.getItemType()) {
+                    itemAdded = method;
+                    ++numberOfMethods;
+                } else if (tempAnnotation.annotationType() == ItemListenerEnum.ITEM_REMOVED.getItemType()) {
+                    itemRemoved = method;
+                    ++numberOfMethods;
+                }
+            }
+        }
+
+        if (numberOfMethods > 0) {
+            addItemListener(hazelcastService, clazz, obj, annotation, itemAdded, itemRemoved);
+        }
+    }
 	
-	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation, Method itemAdded, Method itemRemoved) {
+	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		
 		ItemListenerProxy itemListenerProxy = null;
 		
 		try {
+
+            if( obj == null ){
+                obj = clazz.newInstance();
+            }
 
 			Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 

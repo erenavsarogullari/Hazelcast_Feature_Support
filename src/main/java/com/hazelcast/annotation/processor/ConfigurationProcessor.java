@@ -16,6 +16,17 @@ import java.util.HashSet;
  * Author Yusuf Soysal
  */
 public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
+
+    @Override
+    public boolean canBeProcessedMoreThanOnce() {
+        return false;
+    }
+
+    @Override
+    public void process(IHazelcastService hazelcastService, Object obj, Annotation annotation) {
+        process(hazelcastService, obj.getClass(), annotation);
+    }
+
     @Override
     public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
         Configuration config = (Configuration) annotation;

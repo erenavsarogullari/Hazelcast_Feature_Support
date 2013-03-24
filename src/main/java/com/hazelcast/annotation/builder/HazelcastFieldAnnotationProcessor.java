@@ -11,6 +11,6 @@ import java.lang.reflect.Field;
  */
 public interface HazelcastFieldAnnotationProcessor {
 
-    void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation);
+    void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation);
 
 }

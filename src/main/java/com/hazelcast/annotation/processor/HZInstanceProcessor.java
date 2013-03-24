@@ -15,19 +15,17 @@ import java.lang.reflect.Field;
  */
 public class HZInstanceProcessor implements HazelcastFieldAnnotationProcessor {
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+    public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
         HZInstance hzInstanceAnnotation = (HZInstance) annotation;
 
         HazelcastInstance instance = Hazelcast.getHazelcastInstanceByName(hzInstanceAnnotation.value());
         try {
             field.setAccessible(true);
-            field.set(clazz.newInstance(), instance);
+            field.set(obj, instance);
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
     }

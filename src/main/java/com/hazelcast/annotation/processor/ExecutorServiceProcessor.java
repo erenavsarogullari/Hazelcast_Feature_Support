@@ -22,7 +22,7 @@ import com.hazelcast.srv.IHazelcastService;
 public class ExecutorServiceProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+    public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
         IExecutorService executorAnnotation = (IExecutorService) annotation;
 
         try {
@@ -30,14 +30,12 @@ public class ExecutorServiceProcessor implements HazelcastFieldAnnotationProcess
             for (HazelcastInstance hazelcastInstance : hazelcastInstances) {
                 java.util.concurrent.ExecutorService executorService = (executorAnnotation.name() != null) ? hazelcastInstance.getExecutorService(executorAnnotation.name()) : hazelcastInstance.getExecutorService();
                 field.setAccessible(true);
-                field.set(clazz.newInstance(), executorService);
+                field.set(obj, executorService);
             }
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
             e.printStackTrace();
         }
     }

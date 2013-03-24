@@ -16,10 +16,18 @@ import com.hazelcast.srv.IHazelcastService;
  */
 public class InstanceListenerProcessor implements HazelcastAnnotationProcessor {
 
-	@Override
+    @Override
+    public boolean canBeProcessedMoreThanOnce() {
+        return false;
+    }
+
+    @Override
 	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
 		
 	}
 
+    @Override
+    public void process(IHazelcastService hazelcastService, Object obj, Annotation annotation) {
 
+    }
 }

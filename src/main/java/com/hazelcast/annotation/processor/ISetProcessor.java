@@ -22,7 +22,7 @@ import com.hazelcast.srv.IHazelcastService;
 public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Field field, Annotation annotation) {
+    public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
         ISet setAnnotation = (ISet) annotation;
 
 		try {
@@ -30,13 +30,11 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
 			for(HazelcastInstance instance : hazelcastInstances) {
 				com.hazelcast.core.ISet<Object> distributedSet = instance.getSet(setAnnotation.name());
 				field.setAccessible(true);
-				field.set(clazz.newInstance(), distributedSet);
+				field.set(obj, distributedSet);
 			}						
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
 			e.printStackTrace();
 		}
 	}

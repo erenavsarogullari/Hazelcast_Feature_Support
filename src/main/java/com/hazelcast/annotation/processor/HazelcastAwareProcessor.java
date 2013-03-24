@@ -53,17 +53,28 @@ public class HazelcastAwareProcessor implements HazelcastAnnotationProcessor {
         processorMap.get(clazz).add(processor);
     }
 
+
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-        List<AnnotationField> supportedAnnotationsList = Annotations.SupportedFieldAnnotation.getSupportedAnnotations(clazz);
+    public boolean canBeProcessedMoreThanOnce() {
+        return true;
+    }
+
+    @Override
+    public void process(IHazelcastService hazelcastService, Object obj, Annotation annotation) {
+        List<AnnotationField> supportedAnnotationsList = Annotations.SupportedFieldAnnotation.getSupportedAnnotations(obj.getClass());
 
         if (supportedAnnotationsList.size() > 0) {
             for (AnnotationField supported : supportedAnnotationsList) {
                 List<HazelcastFieldAnnotationProcessor> processors = processorMap.get(supported.getSupportedAnnotatiton().getClassType());
                 for( HazelcastFieldAnnotationProcessor processor : processors ){
-                    processor.process(hazelcastService, clazz, supported.getField(), supported.getAnnotation());
+                    processor.process(hazelcastService, obj, supported.getField(), supported.getAnnotation());
                 }
             }
         }
+    }
+
+    @Override
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+        // not supported
     }
 }
