@@ -1,9 +1,12 @@
 package com.hazelcast.annotation.builder;
 
+import com.hazelcast.util.ConcurrentHashSet;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Date: 24/03/2013 13:22
@@ -11,7 +14,7 @@ import java.util.List;
  */
 public class HZAware {
 
-    private static List<Class<?>> parsedClasses = new ArrayList<Class<?>>();
+    private static Set<Class<?>> parsedClasses = new ConcurrentHashSet<Class<?>>();
 
     public static <T> T initialize(Class<T> clz, Object ... args){
         T instance = null;
