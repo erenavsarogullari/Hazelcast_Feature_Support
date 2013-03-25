@@ -5,8 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
+
 /**
- * Hazelcast IQueue Annotation Interface
+ * Hazelcast MultiMap Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
@@ -19,7 +21,6 @@ import java.lang.annotation.Target;
 public @interface MultiMap {
 
 	String name();
-	int maxSizePerJvm();
-	int backingMapRef();
+	ValueCollectionType valueCollectionType() default ValueCollectionType.SET;
 	
 }

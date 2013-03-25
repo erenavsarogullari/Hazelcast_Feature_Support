@@ -13,12 +13,13 @@ import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
 import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.data.IList;
+import com.hazelcast.annotation.data.IMap;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
+import com.hazelcast.annotation.data.MultiMap;
+import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.MultiMap;
 
 @Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
 @HazelcastAware
@@ -27,10 +28,10 @@ public class Main {
 	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
 	private java.util.concurrent.ExecutorService executorService;
 	
-	@IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue")
+	@IQueue(maxSizePerJvm = 0, name = "testQueue")
     private com.hazelcast.core.IQueue testQueue;
 	
-	@IQueue(backingMapRef = 5, maxSizePerJvm = 0, name = "testQueue2")
+	@IQueue(maxSizePerJvm = 0, name = "testQueue2")
     private com.hazelcast.core.IQueue testQueue2;
 	
 	@ISet(name = "testSet")
@@ -47,6 +48,18 @@ public class Main {
 
     @HZInstance("MyHazelcastInstance")
     private HazelcastInstance instance;
+    
+    @IMap(name="testMap")
+	private com.hazelcast.core.IMap testMap;
+    
+    @IMap(name="testMap2")
+	private com.hazelcast.core.IMap testMap2;
+	
+	@MultiMap(name = "testMultiMap", valueCollectionType = ValueCollectionType.SET)
+	private com.hazelcast.core.MultiMap testMultiMap;
+	
+	@MultiMap(name = "testMultiMap2", valueCollectionType = ValueCollectionType.SET)
+	private com.hazelcast.core.MultiMap testMultiMap2;	
 	
 	public static void main(String[] args) {
         HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
@@ -64,21 +77,31 @@ public class Main {
         main.testList2.add("TestList2 5 ");
         main.testList2.add("TestList2 6 ");
                 
-        IMap<Integer, String> testMap = main.instance.getMap("testMap1");
-		testMap.put(1, "testMap1");
-		testMap.put(2, "testMap2");
+        main.testMap.put(1, "testMap1-1");
+        main.testMap.put(2, "testMap1-2");
+        
+        main.testMap2.put(1, "testMap2-1");
+        main.testMap2.put(2, "testMap2-2");
+
+	    main.testMultiMap.put(1, "TestMultiMap1");
+		main.testMultiMap.put(1, "TestMultiMap2");
+		main.testMultiMap.put(2, "TestMultiMap3");
 		
-		MultiMap<Integer, String> testMultiMap = main.instance.getMultiMap("testMultiMap1");
-		testMultiMap.put(1, "TestMultiMap1");
-		testMultiMap.put(1, "TestMultiMap2");
-		testMultiMap.put(2, "TestMultiMap3");
+		main.testMultiMap2.put(3, "TestMultiMap3");
+		main.testMultiMap2.put(4, "TestMultiMap4");
+		main.testMultiMap2.put(5, "TestMultiMap5");
 
         main.testQueue.add("Test Queue");
         main.testQueue2.add("Test Queue2");
 
         main.testSet.add("Test Set");
         main.testSet2.add("Test Set2");
-        
+     
+        main.testQueue.add("Test Queue");
+        main.testQueue2.add("Test Queue2");
+
+        main.testSet.add("Test Set");
+        main.testSet2.add("Test Set2");
         
         Future<String> task = main.executorService.submit(new Echo("Eren"));
 		   try {

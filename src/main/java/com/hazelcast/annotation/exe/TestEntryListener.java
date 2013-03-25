@@ -15,7 +15,7 @@ import com.hazelcast.core.EntryEvent;
  * @version 1.0.0
  *
  */
-@EntryListener(distributedObjectName = {"testMap1", "testMultiMap1"},
+@EntryListener(distributedObjectName = {"testMap", "testMap2", "testMultiMap", "testMultiMap2"},
 								type = {EntryTypeEnum.MAP, EntryTypeEnum.MULTI_MAP},
 								needsValue=true)
 public class TestEntryListener {	
