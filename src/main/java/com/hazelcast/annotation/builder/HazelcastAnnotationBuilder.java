@@ -32,28 +32,22 @@ public class HazelcastAnnotationBuilder {
 
     public static void parseObjectAnnotations(Object obj) {
         List<AnnotatedClass> supportedAnnotationsList = Annotations.SupportedAnnotation.getSupportedAnnotations(obj.getClass());
-        if (supportedAnnotationsList.size() > 0) {
-
-            fireEventsForObject(obj, supportedAnnotationsList);
-        }
+        fireEventsForObject(obj, supportedAnnotationsList);
     }
 
     private static void fireEvents() {
+        for( Map.Entry<Annotations.SupportedAnnotation, List<Class<?>>> entry : classMap.entrySet() ){
+            Annotations.SupportedAnnotation supportedAnnotation = entry.getKey();
 
-        for (Annotations.SupportedAnnotation supportedAnnotation : Annotations.SupportedAnnotation.values()) {
-            List<Class<?>> clazzListOfSupportedAnnotation = classMap.get(supportedAnnotation);
+            for (Class<?> clazz : entry.getValue()) {
+                boolean eligible = HZAware.eligibleForParsing(clazz);
 
-            if (clazzListOfSupportedAnnotation != null) {
-                for (Class<?> clazz : clazzListOfSupportedAnnotation) {
-                    boolean eligible = HZAware.eligibleForParsing(clazz);
-
-                    HazelcastAnnotationProcessor processor = supportedAnnotation.getProcessor();
-                    if (eligible || (!eligible && processor.canBeProcessedMoreThanOnce())) {
-                        processor.process(hazelcastService, clazz, clazz.getAnnotation((Class) supportedAnnotation.getClassType()));
-                    }
-
-                    HZAware.classParsed(clazz);
+                HazelcastAnnotationProcessor processor = supportedAnnotation.getProcessor();
+                if (eligible || (!eligible && processor.canBeProcessedMoreThanOnce())) {
+                    processor.process(hazelcastService, clazz, clazz.getAnnotation((Class) supportedAnnotation.getClassType()));
                 }
+
+                HZAware.classParsed(clazz);
             }
         }
     }
@@ -77,17 +71,21 @@ public class HazelcastAnnotationBuilder {
         @Override
         public void classFound(Class<?> clazz) {
             List<AnnotatedClass> supportedAnnotationsList = Annotations.SupportedAnnotation.getSupportedAnnotations(clazz);
-            if (supportedAnnotationsList.size() > 0) {
-                for (AnnotatedClass annotatedClass : supportedAnnotationsList) {
-                    List<Class<?>> theList = classMap.get(annotatedClass.getSupportedAnnotation());
-                    if (theList == null) {
-                        theList = new ArrayList<Class<?>>();
-                        classMap.put(annotatedClass.getSupportedAnnotation(), theList);
-                    }
 
-                    theList.add(clazz);
-                }
+            for (AnnotatedClass annotatedClass : supportedAnnotationsList) {
+                List<Class<?>> theList = getOrCreateClassList(annotatedClass);
+
+                theList.add(clazz);
             }
+        }
+
+        private List<Class<?>> getOrCreateClassList(AnnotatedClass annotatedClass) {
+            List<Class<?>> theList = classMap.get(annotatedClass.getSupportedAnnotation());
+            if (theList == null) {
+                theList = new ArrayList<Class<?>>();
+                classMap.put(annotatedClass.getSupportedAnnotation(), theList);
+            }
+            return theList;
         }
     }
 }

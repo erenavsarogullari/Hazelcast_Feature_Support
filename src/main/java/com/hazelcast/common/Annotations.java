@@ -1,16 +1,11 @@
 package com.hazelcast.common;
 
 import com.hazelcast.annotation.HazelcastAware;
+import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.configuration.Configuration;
-import com.hazelcast.annotation.data.HZInstance;
+import com.hazelcast.annotation.data.*;
 import com.hazelcast.annotation.listener.EntryListener;
-import com.hazelcast.annotation.IExecutorService;
-import com.hazelcast.annotation.data.IList;
-import com.hazelcast.annotation.data.IMap;
-import com.hazelcast.annotation.data.IQueue;
-import com.hazelcast.annotation.data.ISet;
-import com.hazelcast.annotation.data.MultiMap;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.MembershipListener;
 import com.hazelcast.annotation.processor.*;
@@ -25,9 +20,8 @@ import java.util.List;
  *
  * @author Yusuf Soysal
  * @author Eren Avsarogullari
- * @since 17 March 2013
  * @version 1.0.0
- *
+ * @since 17 March 2013
  */
 public class Annotations {
 
@@ -47,22 +41,18 @@ public class Annotations {
             this.processor = processor;
         }
 
-        public Class<?> getClassType(){
+        public Class<?> getClassType() {
             return clz;
         }
 
-        public static List<AnnotatedClass> getSupportedAnnotations(Class<?> clz){
+        public static List<AnnotatedClass> getSupportedAnnotations(Class<?> clz) {
             Annotation[] clzAnnotations = clz.getAnnotations();
             List<AnnotatedClass> supportedAnnotationList = new ArrayList<AnnotatedClass>();
 
-            if( clzAnnotations != null ){
-                for( Annotation annotation : clzAnnotations ){
-                    for( SupportedAnnotation supportedAnnotation : SupportedAnnotation.values() ){
-                        if( supportedAnnotation.getClassType() == annotation.annotationType() ){
-                            supportedAnnotationList.add(new AnnotatedClass(supportedAnnotation, clz, annotation));
-                            break;
-                        }
-                    }
+            for (Annotation annotation : clzAnnotations) {
+                AnnotatedClass annotatedClass = visit(clz, annotation);
+                if( annotatedClass != null ){
+                    supportedAnnotationList.add(annotatedClass);
                 }
             }
 
@@ -90,29 +80,56 @@ public class Annotations {
             this.clz = clz;
         }
 
-        public Class<?> getClassType(){
+        public Class<?> getClassType() {
             return clz;
         }
 
-        public static List<AnnotatedField> getSupportedAnnotations(Class<?> clz){
+        public static List<AnnotatedField> getSupportedAnnotations(Class<?> clz) {
             List<AnnotatedField> supportedAnnotationList = new ArrayList<AnnotatedField>();
 
             Field[] fields = clz.getDeclaredFields();
-            if( fields.length > 0){
-                for(Field field : fields) {
-                    for( Annotation annotation : field.getDeclaredAnnotations() ){
-                        for( SupportedFieldAnnotation supportedAnnotation : SupportedFieldAnnotation.values() ){
-                            if( supportedAnnotation.getClassType() == annotation.annotationType() ){
-                                supportedAnnotationList.add(new AnnotatedField(supportedAnnotation, field, annotation));
-                                break;
-                            }
-                        }
-                    }
-
-                }
+            for (Field field : fields) {
+                supportedAnnotationList.addAll(visit(field));
             }
 
             return supportedAnnotationList;
         }
+    }
+
+    private static List<AnnotatedField> visit(Field field) {
+        List<AnnotatedField> supportedAnnotationList = new ArrayList<AnnotatedField>();
+
+        for (Annotation annotation : field.getDeclaredAnnotations()) {
+            AnnotatedField annotated = visit(field, annotation);
+            if (annotated != null) {
+                supportedAnnotationList.add(annotated);
+            }
+        }
+
+        return supportedAnnotationList;
+    }
+
+    private static AnnotatedField visit(Field field, Annotation annotation) {
+        AnnotatedField annotated = null;
+        for (SupportedFieldAnnotation supportedAnnotation : SupportedFieldAnnotation.values()) {
+            if (supportedAnnotation.getClassType() == annotation.annotationType()) {
+                annotated = new AnnotatedField(supportedAnnotation, field, annotation);
+                break;
+            }
+        }
+
+        return annotated;
+    }
+
+    private static AnnotatedClass visit(Class<?> clz, Annotation annotation){
+        AnnotatedClass annotatedClass = null;
+        for (SupportedAnnotation supportedAnnotation : SupportedAnnotation.values()) {
+            if (supportedAnnotation.getClassType() == annotation.annotationType()) {
+                annotatedClass = new AnnotatedClass(supportedAnnotation, clz, annotation);
+                break;
+            }
+        }
+
+        return annotatedClass;
     }
 }

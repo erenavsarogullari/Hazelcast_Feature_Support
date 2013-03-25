@@ -7,6 +7,7 @@ import java.util.Set;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -31,12 +32,12 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
 				com.hazelcast.core.ISet<Object> distributedSet = instance.getSet(setAnnotation.name());
 				field.setAccessible(true);
 				field.set(obj, distributedSet);
-			}						
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+			}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+        }
 	}
 
 

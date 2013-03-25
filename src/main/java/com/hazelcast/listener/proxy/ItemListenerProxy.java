@@ -3,6 +3,7 @@ package com.hazelcast.listener.proxy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.ItemEvent;
 import com.hazelcast.core.ItemListener;
 
@@ -33,13 +34,13 @@ public class ItemListenerProxy implements ItemListener {
 			if(itemAdded != null) {
 			   itemAdded.invoke(target, ie);
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + itemAdded.getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + itemAdded.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + itemAdded.getName(), e);
+        }
 	}
 
 	@Override
@@ -48,13 +49,13 @@ public class ItemListenerProxy implements ItemListener {
 			if(itemRemoved != null) {
 				itemRemoved.invoke(target, ie);
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + itemRemoved.getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + itemRemoved.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + itemRemoved.getName(), e);
+        }
 	}
 
 }

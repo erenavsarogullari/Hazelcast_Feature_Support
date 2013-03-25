@@ -1,5 +1,6 @@
 package com.hazelcast.srv;
 
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.common.SystemConstants;
 import com.hazelcast.config.ClasspathXmlConfig;
 import com.hazelcast.config.Config;
@@ -66,7 +67,7 @@ public class HazelcastService implements IHazelcastService {
                 cfg = new Config();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot parse hazelcast config file", e);
         }
 
         return cfg;

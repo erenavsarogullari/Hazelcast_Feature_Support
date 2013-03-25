@@ -7,8 +7,10 @@ import java.util.Set;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
+import sun.org.mozilla.javascript.internal.NativeObject;
 
 /**
  * Hazelcast EntryListener Annotation Processor
@@ -34,9 +36,9 @@ public class ExecutorServiceProcessor implements HazelcastFieldAnnotationProcess
             }
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         }
     }
 

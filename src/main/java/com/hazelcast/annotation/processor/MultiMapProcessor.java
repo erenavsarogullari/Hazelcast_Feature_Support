@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.MultiMap;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -30,11 +31,11 @@ public class MultiMapProcessor implements HazelcastFieldAnnotationProcessor {
 				com.hazelcast.core.MultiMap multiMap = instance.getMultiMap(setAnnotation.name());
 				field.setAccessible(true);
 				field.set(obj, multiMap);
-			}						
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} 
+			}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+        }
 	}
 }

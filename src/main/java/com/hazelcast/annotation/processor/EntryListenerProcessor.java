@@ -3,6 +3,7 @@ package com.hazelcast.annotation.processor;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.*;
 import com.hazelcast.common.EntryTypeEnum;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
@@ -117,9 +118,9 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
                 }
             }
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot create " + clazz.getName() + " instance", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot call " + clazz.getName() + " constructor", e);
         }
     }
 

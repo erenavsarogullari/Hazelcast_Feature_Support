@@ -135,6 +135,6 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     }
 
     private void setInterfacesConfig(NetworkConfig nwConfig, com.hazelcast.annotation.configuration.Interfaces interfaces ){
-
+        // TODO: why this is empty??
     }
 }

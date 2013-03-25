@@ -66,15 +66,12 @@ public class ClasspathScanner {
                             Class<?> clazz = Class.forName(clsName, false, currentCL);
                             listener.classFound(clazz);
                         } catch (Throwable e) {
-                            // so cannot load this class. should I throw ex?
-                            e.printStackTrace();
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            // should I throw ex?
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot parse Jar file " + jarPath, e);
         }
 
     }
@@ -93,7 +90,6 @@ public class ClasspathScanner {
                         listener.classFound(clazz);
                     } catch (Throwable e) {
                         // so cannot load this class. shpuld I throw ex?
-                        e.printStackTrace();
                     }
                 } else {
                     // this may be another packege

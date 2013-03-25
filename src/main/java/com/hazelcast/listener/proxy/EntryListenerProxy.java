@@ -3,6 +3,7 @@ package com.hazelcast.listener.proxy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
 
@@ -38,11 +39,11 @@ public class EntryListenerProxy implements EntryListener {
 				entryAdded.invoke(target, ee);
 			}
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + entryAdded.getName(), e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + entryAdded.getName(), e);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + entryAdded.getName(), e);
 		}
 	}
 
@@ -52,13 +53,13 @@ public class EntryListenerProxy implements EntryListener {
 			if(entryEvicted != null) {
 				entryEvicted.invoke(target, ee);
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + entryEvicted.getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + entryEvicted.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + entryEvicted.getName(), e);
+        }
 	}
 
 	@Override
@@ -67,13 +68,13 @@ public class EntryListenerProxy implements EntryListener {
 			if(entryRemoved != null) {
 				entryRemoved.invoke(target, ee);
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + entryRemoved.getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + entryRemoved.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + entryRemoved.getName(), e);
+        }
 	}
 
 	@Override
@@ -82,13 +83,13 @@ public class EntryListenerProxy implements EntryListener {
 			if(entryUpdated != null) {
 				entryUpdated.invoke(target, ee);
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
+        } catch (IllegalArgumentException e) {
+            throw new HazelcastExtraException("Method signature is incorrect for " + target.getClass().getName() + " method " + entryUpdated.getName(), e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot access " + target.getClass().getName() + " method " + entryUpdated.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw new HazelcastExtraException("Exception during processing  " + target.getClass().getName() + " method " + entryUpdated.getName(), e);
+        }
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -33,9 +34,9 @@ public class IListProcessor implements HazelcastFieldAnnotationProcessor {
                 field.set(obj, distributedList);
             }
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         }
     }
 }

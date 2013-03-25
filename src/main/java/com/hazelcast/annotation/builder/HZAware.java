@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.util.ConcurrentHashSet;
 
 /**
@@ -33,13 +34,13 @@ public class HZAware {
             HazelcastAnnotationBuilder.parseObjectAnnotations(instance);
 
         } catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new HazelcastExtraException("Cannot create " + clz.getName() + " instance", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new HazelcastExtraException("Cannot call " + clz.getName() + " constructor", e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new HazelcastExtraException("Cannot find a suitable constructor candidate for " + clz.getName() + " with given arguments", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new HazelcastExtraException("Cannot instantiate  " + clz.getName() + " instance", e);
         }
 
         return instance;

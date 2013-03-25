@@ -8,6 +8,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.ItemRemoved;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
+import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
@@ -121,11 +122,11 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 					}
 				}				
 			}
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+        } catch (InstantiationException e) {
+            throw new HazelcastExtraException("Cannot create " + clazz.getName() + " instance", e);
+        } catch (IllegalAccessException e) {
+            throw new HazelcastExtraException("Cannot call " + clazz.getName() + " constructor", e);
+        }
 	}
 	
 	private enum ItemListenerEnum {
