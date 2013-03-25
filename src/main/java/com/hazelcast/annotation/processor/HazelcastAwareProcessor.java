@@ -9,7 +9,7 @@ import com.hazelcast.annotation.data.IMap;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.annotation.data.MultiMap;
-import com.hazelcast.common.AnnotationField;
+import com.hazelcast.common.AnnotatedField;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -65,10 +65,10 @@ public class HazelcastAwareProcessor implements HazelcastAnnotationProcessor {
 
     @Override
     public void process(IHazelcastService hazelcastService, Object obj, Annotation annotation) {
-        List<AnnotationField> supportedAnnotationsList = Annotations.SupportedFieldAnnotation.getSupportedAnnotations(obj.getClass());
+        List<AnnotatedField> supportedAnnotationsList = Annotations.SupportedFieldAnnotation.getSupportedAnnotations(obj.getClass());
 
         if (supportedAnnotationsList.size() > 0) {
-            for (AnnotationField supported : supportedAnnotationsList) {
+            for (AnnotatedField supported : supportedAnnotationsList) {
                 List<HazelcastFieldAnnotationProcessor> processors = processorMap.get(supported.getSupportedAnnotatiton().getClassType());
                 for( HazelcastFieldAnnotationProcessor processor : processors ){
                     processor.process(hazelcastService, obj, supported.getField(), supported.getAnnotation());
