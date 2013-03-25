@@ -32,7 +32,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         Configuration config = (Configuration) annotation;
 
         Config cfg = null;
-        
+
         if( Utilities.isUsable(config.file()) ){
             cfg = hazelcastService.getHazelcastConfig(config.file());
         } else {
