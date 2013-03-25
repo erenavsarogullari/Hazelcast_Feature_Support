@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Configuration {
     String value();
+    String file() default "";
     int port() default 0;
     boolean autoIncrement() default true;
     Multicast multicast() default @Multicast(enabled = false);

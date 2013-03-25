@@ -31,7 +31,14 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
         Configuration config = (Configuration) annotation;
 
-        Config cfg = new Config();
+        Config cfg = null;
+        
+        if( Utilities.isUsable(config.file()) ){
+            cfg = hazelcastService.getHazelcastConfig(config.file());
+        } else {
+            cfg = new Config();
+        }
+
         cfg.setInstanceName(config.value());
 
         NetworkConfig nwConfig = new NetworkConfig();

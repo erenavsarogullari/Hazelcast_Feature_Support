@@ -42,4 +42,6 @@ public interface IHazelcastService {
      */
 	HazelcastInstance getHazelcastInstanceByName(String instanceName);
 
+    public Config getHazelcastConfig(String filename);
+
 }
