@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hazelcast.common.SystemConstants;
+
 /**
  * Hazelcast IExecutorService Annotation Interface
  *
@@ -19,8 +21,8 @@ import java.lang.annotation.Target;
 public @interface IExecutorService {
 
 	String name();
-	int corePoolSize();
-	int maxPoolSize();
-	int keepAliveSeconds();
+	int corePoolSize() default 16;
+	int maxPoolSize() default 64;
+	int keepAliveSeconds() default 60;
 	
 }

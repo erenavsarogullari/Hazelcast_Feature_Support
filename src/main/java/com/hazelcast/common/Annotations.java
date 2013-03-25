@@ -6,8 +6,10 @@ import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.data.IList;
+import com.hazelcast.annotation.data.IMap;
 import com.hazelcast.annotation.data.IQueue;
 import com.hazelcast.annotation.data.ISet;
+import com.hazelcast.annotation.data.MultiMap;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.MembershipListener;
 
@@ -70,7 +72,9 @@ public class Annotations {
         EXECUTOR_SERVICE(IExecutorService.class),
         IQUEUE(IQueue.class),
         ISET(ISet.class),
-        ILIST(IList.class);
+        ILIST(IList.class),
+        IMAP(IMap.class),
+        MULTI_MAP(MultiMap.class);
 
         private Class<?> clz;
 

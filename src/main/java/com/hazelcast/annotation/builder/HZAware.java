@@ -1,12 +1,10 @@
 package com.hazelcast.annotation.builder;
 
-import com.hazelcast.util.ConcurrentHashSet;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+
+import com.hazelcast.util.ConcurrentHashSet;
 
 /**
  * Date: 24/03/2013 13:22

@@ -55,7 +55,7 @@ public class HazelcastAnnotationBuilder {
         List<Annotations.SupportedAnnotation> supportedAnnotationsList = Annotations.SupportedAnnotation.getSupportedAnnotations(obj.getClass());
         if (supportedAnnotationsList.size() > 0) {
 
-            fireEventsForObject(obj,supportedAnnotationsList);
+            fireEventsForObject(obj, supportedAnnotationsList);
         }
     }
 
