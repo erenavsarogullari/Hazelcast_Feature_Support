@@ -1,9 +1,11 @@
 package com.hazelcast.annotation.processor;
 
+import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.configuration.*;
 import com.hazelcast.common.Utilities;
 import com.hazelcast.config.*;
+import com.hazelcast.config.Interfaces;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -40,6 +42,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         }
 
         cfg.setInstanceName(config.value());
+        HZAware.setHzInstanceName(config.value());
 
         NetworkConfig nwConfig = new NetworkConfig();
         cfg.setNetworkConfig(nwConfig);
@@ -48,6 +51,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         setMulticastConfig(nwConfig, config.multicast());
         setTcpIpConfig(nwConfig, config.tcpip());
         setAwsConfig(nwConfig, config.aws());
+        setInterfacesConfig(nwConfig, config.interfaces());
 
         Hazelcast.newHazelcastInstance(cfg);
     }
@@ -135,6 +139,11 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     }
 
     private void setInterfacesConfig(NetworkConfig nwConfig, com.hazelcast.annotation.configuration.Interfaces interfaces ){
-        // TODO: why this is empty??
+        Interfaces nwInterfaces = nwConfig.getInterfaces();
+        nwInterfaces.setEnabled(interfaces.enabled());
+        
+        if( interfaces.enabled() ){
+            nwInterfaces.setInterfaces(Arrays.asList(interfaces.value()));
+        }
     }
 }
