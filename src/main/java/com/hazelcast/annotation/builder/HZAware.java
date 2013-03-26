@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
+import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.util.ConcurrentHashSet;
 
@@ -20,6 +21,13 @@ public class HZAware {
     public static <T> T initialize(Class<T> clz, Object ... args){
         T instance = null;
         try {
+
+            HazelcastAware hzAwareAnnotation = clz.getAnnotation(HazelcastAware.class);
+
+            if( hzAwareAnnotation == null ){
+                throw new HazelcastExtraException("Class is not marked as @HazelcastAware");
+            }
+
             if( args.length > 0 ){
                 Class<?>[] clzTypes = new Class<?>[args.length];
                 int index = 0;
