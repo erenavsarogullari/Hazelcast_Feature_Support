@@ -92,6 +92,11 @@ public class Annotations {
                 supportedAnnotationList.addAll(visit(field));
             }
 
+            // lets have a look at parent class
+            if( clz.getSuperclass() != Object.class){
+                supportedAnnotationList.addAll(getSupportedAnnotations(clz.getSuperclass()));
+            }
+
             return supportedAnnotationList;
         }
     }

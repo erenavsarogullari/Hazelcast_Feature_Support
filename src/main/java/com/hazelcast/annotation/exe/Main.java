@@ -24,7 +24,7 @@ import com.hazelcast.core.HazelcastInstance;
 
 @Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
 @HazelcastAware
-public class Main {
+public class Main extends ParentClass {
 	
 	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
 	private java.util.concurrent.ExecutorService executorService;
