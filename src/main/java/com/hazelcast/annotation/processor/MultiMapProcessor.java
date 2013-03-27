@@ -7,6 +7,7 @@ import java.util.Set;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.MultiMap;
 import com.hazelcast.common.HazelcastExtraException;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -38,4 +39,9 @@ public class MultiMapProcessor implements HazelcastFieldAnnotationProcessor {
             throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         }
 	}
+
+    @Override
+    public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
+        // nothing to do here
+    }
 }

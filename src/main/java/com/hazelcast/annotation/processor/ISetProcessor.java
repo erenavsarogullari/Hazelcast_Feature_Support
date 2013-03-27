@@ -8,6 +8,7 @@ import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.ISet;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.HazelcastExtraException;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -27,6 +28,11 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
         ISet setAnnotation = (ISet) annotation;
 
 		try {
+            /*
+             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
+             * I'm not changing it right now because probably you already did this :)
+             */
+
 			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
 			for(HazelcastInstance instance : hazelcastInstances) {
 				com.hazelcast.core.ISet<Object> distributedSet = instance.getSet(setAnnotation.name());
@@ -40,5 +46,19 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
         }
 	}
 
+    @Override
+    public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
+        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+
+        com.hazelcast.core.ISet<Object> distributedSet = hazelcastInstance.getSet(typeName);
+        if(distributedSet != null) {
+            field.setAccessible(true);
+            try {
+                field.set(obj, distributedSet);
+            } catch (IllegalAccessException e) {
+                throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+            }
+        }
+    }
 
 }

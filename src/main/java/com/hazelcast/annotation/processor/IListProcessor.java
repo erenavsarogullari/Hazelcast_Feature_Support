@@ -8,6 +8,7 @@ import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IList;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.HazelcastExtraException;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -27,6 +28,11 @@ public class IListProcessor implements HazelcastFieldAnnotationProcessor {
         IList listAnnotation = (IList) annotation;
 
         try {
+            /*
+             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
+             * I'm not changing it right now because probably you already did this :)
+             */
+
             Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
             for(HazelcastInstance instance : hazelcastInstances) {
                 com.hazelcast.core.IList<Object> distributedList = instance.getList(listAnnotation.name());
@@ -37,6 +43,21 @@ public class IListProcessor implements HazelcastFieldAnnotationProcessor {
             throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {
             throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+        }
+    }
+
+    @Override
+    public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
+        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+
+        com.hazelcast.core.IList<Object> distributedList = hazelcastInstance.getList(typeName);
+        if(distributedList != null) {
+            field.setAccessible(true);
+            try {
+                field.set(obj, distributedList);
+            } catch (IllegalAccessException e) {
+                throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+            }
         }
     }
 }

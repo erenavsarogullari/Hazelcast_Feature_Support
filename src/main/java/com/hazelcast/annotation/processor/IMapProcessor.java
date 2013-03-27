@@ -6,6 +6,8 @@ import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IMap;
+import com.hazelcast.common.HazelcastExtraException;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -25,6 +27,11 @@ public class IMapProcessor implements HazelcastFieldAnnotationProcessor {
     	IMap mapAnnotation = (IMap) annotation;
 
 		try {
+            /*
+             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
+             * I'm not changing it right now because probably you already did this :)
+             */
+
 			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
 			for(HazelcastInstance instance : hazelcastInstances) {
 				com.hazelcast.core.IMap map = instance.getMap(mapAnnotation.name());
@@ -37,4 +44,19 @@ public class IMapProcessor implements HazelcastFieldAnnotationProcessor {
 			e.printStackTrace();
 		} 
 	}
+
+    @Override
+    public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
+        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+
+        com.hazelcast.core.IMap<Object, Object> distributedMap = hazelcastInstance.getMap(typeName);
+        if(distributedMap != null) {
+            field.setAccessible(true);
+            try {
+                field.set(obj, distributedMap);
+            } catch (IllegalAccessException e) {
+                throw new HazelcastExtraException("Cannot access " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
+            }
+        }
+    }
 }

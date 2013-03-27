@@ -12,12 +12,7 @@ import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
-import com.hazelcast.annotation.data.HZInstance;
-import com.hazelcast.annotation.data.IList;
-import com.hazelcast.annotation.data.IMap;
-import com.hazelcast.annotation.data.IQueue;
-import com.hazelcast.annotation.data.ISet;
-import com.hazelcast.annotation.data.MultiMap;
+import com.hazelcast.annotation.data.*;
 import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -49,8 +44,8 @@ public class Main extends ParentClass {
 
     @HZInstance("MyHazelcastInstance")
     private HazelcastInstance instance;
-    
-    @IMap(name="testMap")
+
+    @Distributed(instanceName = "MyHazelcastInstance", name = "testMap")
 	private com.hazelcast.core.IMap testMap;
     
     @IMap(name="testMap2")

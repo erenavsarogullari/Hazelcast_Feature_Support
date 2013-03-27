@@ -3,6 +3,7 @@ package com.hazelcast.common;
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
+import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.data.*;
 import com.hazelcast.annotation.listener.EntryListener;
@@ -66,18 +67,21 @@ public class Annotations {
 
     public enum SupportedFieldAnnotation {
 
-        HZ_INSTANCE(HZInstance.class),
-        EXECUTOR_SERVICE(IExecutorService.class),
-        IQUEUE(IQueue.class),
-        ISET(ISet.class),
-        ILIST(IList.class),
-        IMAP(IMap.class),
-        MULTI_MAP(MultiMap.class);
+        HZ_INSTANCE(HZInstance.class, new HZInstanceProcessor()),
+        EXECUTOR_SERVICE(IExecutorService.class, new ExecutorServiceProcessor()),
+        IQUEUE(IQueue.class, new IQueueProcessor()),
+        ISET(ISet.class, new ISetProcessor()),
+        ILIST(IList.class, new IListProcessor()),
+        IMAP(IMap.class, new IMapProcessor()),
+        MULTI_MAP(MultiMap.class, new MultiMapProcessor()),
+        DISTRIBUTED(Distributed.class, new DistributedFieldProcessor());
 
         private Class<?> clz;
+        private HazelcastFieldAnnotationProcessor processor;
 
-        SupportedFieldAnnotation(Class<?> clz) {
+        SupportedFieldAnnotation(Class<?> clz, HazelcastFieldAnnotationProcessor processor) {
             this.clz = clz;
+            this.processor = processor;
         }
 
         public Class<?> getClassType() {
@@ -98,6 +102,24 @@ public class Annotations {
             }
 
             return supportedAnnotationList;
+        }
+
+        public static SupportedFieldAnnotation findByClassType(Class<?> clazz){
+            for (SupportedFieldAnnotation annotation : values()) {
+                // what is wrong with this?
+                System.out.println( annotation.getClassType() );
+                System.out.println( clazz );
+                System.out.println( "============" );
+                if( annotation.getClassType() == clazz ){
+                    return annotation;
+                }
+            }
+
+            return null;
+        }
+
+        public HazelcastFieldAnnotationProcessor getProcessor() {
+            return processor;
         }
     }
 

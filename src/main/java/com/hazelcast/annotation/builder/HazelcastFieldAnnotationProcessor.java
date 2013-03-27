@@ -13,4 +13,6 @@ public interface HazelcastFieldAnnotationProcessor {
 
     void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation);
 
+    void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName);
+
 }
