@@ -14,10 +14,6 @@ import com.hazelcast.util.ConcurrentHashSet;
  */
 public class HZAware {
 
-    private static Set<Class<?>> parsedClasses = new ConcurrentHashSet<Class<?>>();
-
-    private static String hzInstanceName = null;
-
     public static <T> T initialize(Class<T> clz, Object ... args){
         T instance = null;
         try {
@@ -54,21 +50,5 @@ public class HZAware {
         }
 
         return instance;
-    }
-
-    public static boolean eligibleForParsing(Class<?> clz){
-        return !parsedClasses.contains(clz);
-    }
-
-    public static boolean classParsed(Class<?> clz){
-        return parsedClasses.add(clz);
-    }
-
-    public static String getHzInstanceName() {
-        return hzInstanceName;
-    }
-
-    public static void setHzInstanceName(String hzInstanceName) {
-        HZAware.hzInstanceName = hzInstanceName;
     }
 }

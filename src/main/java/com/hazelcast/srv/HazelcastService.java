@@ -1,7 +1,9 @@
 package com.hazelcast.srv;
 
+import com.hazelcast.common.HazelcastCommonData;
 import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.common.SystemConstants;
+import com.hazelcast.common.Utilities;
 import com.hazelcast.config.ClasspathXmlConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.FileSystemXmlConfig;
@@ -51,6 +53,33 @@ public class HazelcastService implements IHazelcastService {
     @Override
     public HazelcastInstance getHazelcastInstanceByName(String instanceName) {
         return Hazelcast.getHazelcastInstanceByName(instanceName);
+    }
+
+    @Override
+    public HazelcastInstance getCurrentHazelcastInstance(String name){
+        String currentName = null;
+
+        if(Utilities.isUsable(name)){
+            currentName = name;
+        } else if(HazelcastCommonData.getHzInstanceName() != null){
+            currentName = HazelcastCommonData.getHzInstanceName();
+        }
+
+        HazelcastInstance instance = null;
+        if( currentName != null ){
+            instance = getHazelcastInstanceByName(currentName);
+        } else {
+            instance = getFirstHazelcastInstance();
+        }
+
+        return instance;
+    }
+
+    @Override
+    public HazelcastInstance getFirstHazelcastInstance(){
+        Set<HazelcastInstance> allInstances = getAllHazelcastInstances();
+        HazelcastInstance[] hazelcastInstances = allInstances.toArray(new HazelcastInstance[allInstances.size()]);
+        return hazelcastInstances.length > 0 ? hazelcastInstances[0] : null;
     }
 
     @Override

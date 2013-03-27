@@ -1,9 +1,6 @@
 package com.hazelcast.annotation.builder;
 
-import com.hazelcast.common.AnnotatedClass;
-import com.hazelcast.common.Annotations;
-import com.hazelcast.common.ClasspathScanEventListener;
-import com.hazelcast.common.ClasspathScanner;
+import com.hazelcast.common.*;
 import com.hazelcast.srv.HazelcastService;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -40,20 +37,20 @@ public class HazelcastAnnotationBuilder {
             Annotations.SupportedAnnotation supportedAnnotation = entry.getKey();
 
             for (Class<?> clazz : entry.getValue()) {
-                boolean eligible = HZAware.eligibleForParsing(clazz);
+                boolean eligible = HazelcastCommonData.eligibleForParsing(clazz);
 
                 HazelcastAnnotationProcessor processor = supportedAnnotation.getProcessor();
                 if (eligible || (!eligible && processor.canBeProcessedMoreThanOnce())) {
                     processor.process(hazelcastService, clazz, clazz.getAnnotation((Class) supportedAnnotation.getClassType()));
                 }
 
-                HZAware.classParsed(clazz);
+                HazelcastCommonData.classParsed(clazz);
             }
         }
     }
 
     private static void fireEventsForObject(Object obj, List<AnnotatedClass> supportedAnnotationsList) {
-        boolean eligible = HZAware.eligibleForParsing(obj.getClass());
+        boolean eligible = HazelcastCommonData.eligibleForParsing(obj.getClass());
 
         for (AnnotatedClass annotatedClass : supportedAnnotationsList) {
             HazelcastAnnotationProcessor processor = annotatedClass.getSupportedAnnotation().getProcessor();
@@ -63,7 +60,7 @@ public class HazelcastAnnotationBuilder {
             }
         }
 
-        HZAware.classParsed(obj.getClass());
+        HazelcastCommonData.classParsed(obj.getClass());
     }
 
     public static class ClasspathScannerImpl implements ClasspathScanEventListener {

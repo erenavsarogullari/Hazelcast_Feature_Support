@@ -106,10 +106,6 @@ public class Annotations {
 
         public static SupportedFieldAnnotation findByClassType(Class<?> clazz){
             for (SupportedFieldAnnotation annotation : values()) {
-                // what is wrong with this?
-                System.out.println( annotation.getClassType() );
-                System.out.println( clazz );
-                System.out.println( "============" );
                 if( annotation.getClassType() == clazz ){
                     return annotation;
                 }

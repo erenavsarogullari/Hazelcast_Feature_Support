@@ -3,6 +3,7 @@ package com.hazelcast.annotation.processor;
 import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.configuration.*;
+import com.hazelcast.common.HazelcastCommonData;
 import com.hazelcast.common.Utilities;
 import com.hazelcast.config.*;
 import com.hazelcast.config.Interfaces;
@@ -42,7 +43,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         }
 
         cfg.setInstanceName(config.value());
-        HZAware.setHzInstanceName(config.value());
+        HazelcastCommonData.setHzInstanceName(config.value());
 
         NetworkConfig nwConfig = new NetworkConfig();
         cfg.setNetworkConfig(nwConfig);

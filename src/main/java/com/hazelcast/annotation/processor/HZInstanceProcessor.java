@@ -19,7 +19,7 @@ public class HZInstanceProcessor implements HazelcastFieldAnnotationProcessor {
     public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
         HZInstance hzInstanceAnnotation = (HZInstance) annotation;
 
-        HazelcastInstance instance = Hazelcast.getHazelcastInstanceByName(hzInstanceAnnotation.value());
+        HazelcastInstance instance = hazelcastService.getCurrentHazelcastInstance(hzInstanceAnnotation.value());
         try {
             field.setAccessible(true);
             field.set(obj, instance);
