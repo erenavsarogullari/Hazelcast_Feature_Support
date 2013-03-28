@@ -1,18 +1,24 @@
 package com.hazelcast.annotation.exe;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-
 import java.util.concurrent.Future;
 
-import com.hazelcast.annotation.*;
+import com.hazelcast.annotation.HazelcastAware;
+import com.hazelcast.annotation.IExecutorService;
 import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
-import com.hazelcast.annotation.data.*;
+import com.hazelcast.annotation.data.Distributed;
+import com.hazelcast.annotation.data.HZInstance;
+import com.hazelcast.annotation.data.IList;
+import com.hazelcast.annotation.data.IMap;
+import com.hazelcast.annotation.data.IQueue;
+import com.hazelcast.annotation.data.ISet;
+import com.hazelcast.annotation.data.ITopic;
+import com.hazelcast.annotation.data.MultiMap;
 import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -20,42 +26,48 @@ import com.hazelcast.core.HazelcastInstance;
 @Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
 @HazelcastAware
 public class Main extends ParentClass {
-	
-	@IExecutorService(corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
-	private java.util.concurrent.ExecutorService executorService;
-	
-	@IQueue(maxSizePerJvm = 0, name = "testQueue")
-    private com.hazelcast.core.IQueue testQueue;
-	
-	@IQueue(maxSizePerJvm = 0, name = "testQueue2")
-    private com.hazelcast.core.IQueue testQueue2;
-	
-	@ISet(name = "testSet")
-    private com.hazelcast.core.ISet testSet;
-	
-	@ISet(name = "testSet2")
-    private com.hazelcast.core.ISet testSet2;
-	
-	@IList(name = "testList")
-    private com.hazelcast.core.IList testList;
-	
-	@IList(name = "testList2")
-    private com.hazelcast.core.IList testList2;
 
     @HZInstance("MyHazelcastInstance")
     private HazelcastInstance instance;
+    
+	@IExecutorService(instanceName = "MyHazelcastInstance", corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
+	private java.util.concurrent.ExecutorService executorService;
+	
+	@IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueue")
+    private com.hazelcast.core.IQueue testQueue;
+	
+	@IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueue2")
+    private com.hazelcast.core.IQueue testQueue2;
+	
+	@ISet(instanceName = "MyHazelcastInstance", name = "testSet")
+    private com.hazelcast.core.ISet testSet;
+	
+	@ISet(instanceName = "MyHazelcastInstance", name = "testSet2")
+    private com.hazelcast.core.ISet testSet2;
+	
+	@IList(instanceName = "MyHazelcastInstance", name = "testList")
+    private com.hazelcast.core.IList testList;
+	
+	@IList(instanceName = "MyHazelcastInstance", name = "testList2")
+    private com.hazelcast.core.IList testList2;
 
     @Distributed(instanceName = "MyHazelcastInstance", name = "testMap")
 	private com.hazelcast.core.IMap testMap;
     
-    @IMap(name="testMap2")
+    @IMap(instanceName = "MyHazelcastInstance", name="testMap2")
 	private com.hazelcast.core.IMap testMap2;
 	
-	@MultiMap(name = "testMultiMap", valueCollectionType = ValueCollectionType.SET)
+	@MultiMap(instanceName = "MyHazelcastInstance", name = "testMultiMap", valueCollectionType = ValueCollectionType.SET)
 	private com.hazelcast.core.MultiMap testMultiMap;
 	
-	@MultiMap(name = "testMultiMap2", valueCollectionType = ValueCollectionType.SET)
-	private com.hazelcast.core.MultiMap testMultiMap2;	
+	@MultiMap(instanceName = "MyHazelcastInstance", name = "testMultiMap2", valueCollectionType = ValueCollectionType.SET)
+	private com.hazelcast.core.MultiMap testMultiMap2;
+	
+	@ITopic(instanceName = "MyHazelcastInstance", name = "testTopic")
+	private com.hazelcast.core.ITopic testTopic;
+	
+	@ITopic(instanceName = "MyHazelcastInstance", name = "testTopic2")
+	private com.hazelcast.core.ITopic testTopic2;
 	
 	public static void main(String[] args) {
         HazelcastAnnotationBuilder.build("com.hazelcast.annotation");
@@ -93,11 +105,8 @@ public class Main extends ParentClass {
         main.testSet.add("Test Set");
         main.testSet2.add("Test Set2");
      
-        main.testQueue.add("Test Queue");
-        main.testQueue2.add("Test Queue2");
-
-        main.testSet.add("Test Set");
-        main.testSet2.add("Test Set2");
+        main.testTopic.publish("Test Topic");
+        main.testTopic2.publish("Test Topic2");
         
         Future<String> task = main.executorService.submit(new Echo("Eren"));
 		   try {

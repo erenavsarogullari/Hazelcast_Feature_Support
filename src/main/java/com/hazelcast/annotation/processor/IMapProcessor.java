@@ -2,7 +2,6 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IMap;
@@ -27,17 +26,16 @@ public class IMapProcessor implements HazelcastFieldAnnotationProcessor {
     	IMap mapAnnotation = (IMap) annotation;
 
 		try {
-            /*
-             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
-             * I'm not changing it right now because probably you already did this :)
-             */
-
-			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-			for(HazelcastInstance instance : hazelcastInstances) {
-				com.hazelcast.core.IMap map = instance.getMap(mapAnnotation.name());
-				field.setAccessible(true);
-				field.set(obj, map);
-			}						
+			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(mapAnnotation.instanceName());
+            
+			if(hazelcastInstance == null) {
+            	throw new HazelcastExtraException("HazelcastInstance " + mapAnnotation.instanceName() + "must not be null");
+            }
+            
+			com.hazelcast.core.IMap map = hazelcastInstance.getMap(mapAnnotation.name());
+			field.setAccessible(true);
+			field.set(obj, map);
+									
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

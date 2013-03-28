@@ -38,6 +38,7 @@ public class DistributedFieldProcessor implements HazelcastFieldAnnotationProces
         distributedClassMap.put(BlockingQueue.class, IQueue.class);
         distributedClassMap.put(com.hazelcast.core.IList.class, IList.class);
         distributedClassMap.put(List.class, IList.class);
+        distributedClassMap.put(ITopic.class, ITopic.class);
     }
 
     @Override

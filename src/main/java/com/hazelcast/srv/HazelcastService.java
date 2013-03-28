@@ -101,5 +101,10 @@ public class HazelcastService implements IHazelcastService {
 
         return cfg;
     }
+    
+    @Override
+    public HazelcastInstance newHazelcastInstance(Config config){        
+        return Hazelcast.newHazelcastInstance(config);
+    }
 
 }

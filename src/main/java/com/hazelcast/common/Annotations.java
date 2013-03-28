@@ -9,6 +9,7 @@ import com.hazelcast.annotation.data.*;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.MembershipListener;
+import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.processor.*;
 
 import java.lang.annotation.Annotation;
@@ -29,10 +30,11 @@ public class Annotations {
     public enum SupportedAnnotation {
 
         CONFIGURATION(Configuration.class, new ConfigurationProcessor()),
-        HAZELCASTAWAR(HazelcastAware.class, new HazelcastAwareProcessor()),
+        HAZELCASTAWARE(HazelcastAware.class, new HazelcastAwareProcessor()),
         ITEM_LISTENER(ItemListener.class, new ItemListenerProcessor()),
         ENTRY_LISTENER(EntryListener.class, new EntryListenerProcessor()),
-        MEMBERSHIP_LISTENER(MembershipListener.class, new MembershipListenerProcessor());
+        MEMBERSHIP_LISTENER(MembershipListener.class, new MembershipListenerProcessor()),
+        MESSAGE_LISTENER(MessageListener.class, new MessageListenerProcessor());
 
         private Class<?> clz;
         private HazelcastAnnotationProcessor processor;
@@ -46,18 +48,18 @@ public class Annotations {
             return clz;
         }
 
-        public static List<AnnotatedClass> getSupportedAnnotations(Class<?> clz) {
+        public static List<AnnotatedClass> getAnnotatedClassList(Class<?> clz) {
             Annotation[] clzAnnotations = clz.getAnnotations();
-            List<AnnotatedClass> supportedAnnotationList = new ArrayList<AnnotatedClass>();
+            List<AnnotatedClass> annotatedClassList = new ArrayList<AnnotatedClass>();
 
             for (Annotation annotation : clzAnnotations) {
                 AnnotatedClass annotatedClass = visit(clz, annotation);
                 if( annotatedClass != null ){
-                    supportedAnnotationList.add(annotatedClass);
+                	annotatedClassList.add(annotatedClass);
                 }
             }
 
-            return supportedAnnotationList;
+            return annotatedClassList;
         }
 
         public HazelcastAnnotationProcessor getProcessor() {
@@ -74,7 +76,8 @@ public class Annotations {
         ILIST(IList.class, new IListProcessor()),
         IMAP(IMap.class, new IMapProcessor()),
         MULTI_MAP(MultiMap.class, new MultiMapProcessor()),
-        DISTRIBUTED(Distributed.class, new DistributedFieldProcessor());
+        DISTRIBUTED(Distributed.class, new DistributedFieldProcessor()),
+        ITOPIC(ITopic.class, new ITopicProcessor());
 
         private Class<?> clz;
         private HazelcastFieldAnnotationProcessor processor;

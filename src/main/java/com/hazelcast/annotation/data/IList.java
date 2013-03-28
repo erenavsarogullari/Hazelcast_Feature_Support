@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface IList {
 
+	String instanceName();
 	String name();
 	
 }

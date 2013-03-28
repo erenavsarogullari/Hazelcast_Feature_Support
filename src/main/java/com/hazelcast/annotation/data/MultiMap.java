@@ -20,6 +20,7 @@ import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
 @Target(ElementType.FIELD)
 public @interface MultiMap {
 
+	String instanceName();
 	String name();
 	ValueCollectionType valueCollectionType() default ValueCollectionType.SET;
 	

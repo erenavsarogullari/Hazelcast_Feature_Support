@@ -7,6 +7,6 @@ import com.hazelcast.annotation.data.IQueue;
  * Author Yusuf Soysal
  */
 public class ParentClass {
-    @IQueue(maxSizePerJvm = 0, name = "testQueueParent")
+    @IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueueParent")
     private com.hazelcast.core.IQueue testQueueParent;
 }

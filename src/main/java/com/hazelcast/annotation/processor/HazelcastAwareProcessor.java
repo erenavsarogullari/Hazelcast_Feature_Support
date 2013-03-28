@@ -1,18 +1,13 @@
 package com.hazelcast.annotation.processor;
 
-import com.hazelcast.annotation.IExecutorService;
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
-import com.hazelcast.annotation.data.*;
 import com.hazelcast.common.AnnotatedField;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.srv.IHazelcastService;
-
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Date: 23/03/2013 16:40

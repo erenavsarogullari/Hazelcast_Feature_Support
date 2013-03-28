@@ -2,12 +2,10 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.MultiMap;
 import com.hazelcast.common.HazelcastExtraException;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -24,15 +22,19 @@ public class MultiMapProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
     public void process(IHazelcastService hazelcastService, Object obj, Field field, Annotation annotation) {
-    	MultiMap setAnnotation = (MultiMap) annotation;
+    	MultiMap multiMapAnnotation = (MultiMap) annotation;
 
 		try {
-			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-			for(HazelcastInstance instance : hazelcastInstances) {
-				com.hazelcast.core.MultiMap multiMap = instance.getMultiMap(setAnnotation.name());
-				field.setAccessible(true);
-				field.set(obj, multiMap);
-			}
+			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(multiMapAnnotation.instanceName());
+        	
+        	if(hazelcastInstance == null) {
+            	throw new HazelcastExtraException("HazelcastInstance " + multiMapAnnotation.instanceName() + "must not be null");
+            }
+			
+        	com.hazelcast.core.MultiMap multiMap = hazelcastInstance.getMultiMap(multiMapAnnotation.name());
+			field.setAccessible(true);
+			field.set(obj, multiMap);
+			
         } catch (IllegalArgumentException e) {
             throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {
