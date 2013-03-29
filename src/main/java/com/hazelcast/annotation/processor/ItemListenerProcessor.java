@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.ItemRemoved;
@@ -68,64 +69,57 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		
 		ItemListenerProxy itemListenerProxy = null;
-		
-		try {
 
-            if( obj == null ){
-                obj = clazz.newInstance();
+        if( obj == null ){
+            obj = HZAware.initialize(clazz);
+        }
+
+        Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
+
+        ItemListener listener = (ItemListener) annotation;
+
+        for (HazelcastInstance instance : allHazelcastInstances) {
+
+            String[] distributedObjectNames = null;
+            ItemTypeEnum[] types = listener.type();
+
+            for (ItemTypeEnum type : types) {
+
+                itemListenerProxy = new ItemListenerProxy(obj, itemAdded, itemRemoved);
+
+                switch (type) {
+
+                case LIST:
+                    distributedObjectNames = listener.distributedObjectName();
+                    for (String distributedObjectName : distributedObjectNames) {
+                        IList list = instance.getList(distributedObjectName);
+                        if (list != null) {
+                            list.addItemListener(itemListenerProxy, listener.needsValue());
+                        }
+                    }
+                    break;
+
+                case QUEUE:
+                    distributedObjectNames = listener.distributedObjectName();
+                    for (String distributedObjectName : distributedObjectNames) {
+                        IQueue queue = instance.getQueue(distributedObjectName);
+                        if (queue != null) {
+                            queue.addItemListener(itemListenerProxy, listener.needsValue());
+                        }
+                    }
+                    break;
+
+                case SET:
+                    distributedObjectNames = listener.distributedObjectName();
+                    for (String distributedObjectName : distributedObjectNames) {
+                        ISet set = instance.getSet(distributedObjectName);
+                        if (set != null) {
+                            set.addItemListener(itemListenerProxy, listener.needsValue());
+                        }
+                    }
+                    break;
+                }
             }
-
-			Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
-
-			ItemListener listener = (ItemListener) annotation;
-			
-			for (HazelcastInstance instance : allHazelcastInstances) {				
-				
-				String[] distributedObjectNames = null;
-				ItemTypeEnum[] types = listener.type();
-				
-				for (ItemTypeEnum type : types) {
-					
-					itemListenerProxy = new ItemListenerProxy(clazz.newInstance(), itemAdded, itemRemoved);
-					
-					switch (type) {
-
-					case LIST:
-						distributedObjectNames = listener.distributedObjectName();
-						for (String distributedObjectName : distributedObjectNames) {
-							IList list = instance.getList(distributedObjectName);
-							if (list != null) {
-								list.addItemListener(itemListenerProxy, listener.needsValue());
-							}
-						}
-						break;
-
-					case QUEUE:
-						distributedObjectNames = listener.distributedObjectName();
-						for (String distributedObjectName : distributedObjectNames) {
-							IQueue queue = instance.getQueue(distributedObjectName);
-							if (queue != null) {
-								queue.addItemListener(itemListenerProxy, listener.needsValue());
-							}
-						}
-						break;
-
-					case SET:
-						distributedObjectNames = listener.distributedObjectName();
-						for (String distributedObjectName : distributedObjectNames) {
-							ISet set = instance.getSet(distributedObjectName);
-							if (set != null) {
-								set.addItemListener(itemListenerProxy, listener.needsValue());
-							}
-						}
-						break;
-					}
-				}				
-			}
-        } catch (InstantiationException e) {
-            throw new HazelcastExtraException("Cannot create " + clazz.getName() + " instance", e);
-        } catch (IllegalAccessException e) {
-            throw new HazelcastExtraException("Cannot call " + clazz.getName() + " constructor", e);
         }
 	}
 	

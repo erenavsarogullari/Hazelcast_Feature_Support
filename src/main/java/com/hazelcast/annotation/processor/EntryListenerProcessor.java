@@ -1,5 +1,6 @@
 package com.hazelcast.annotation.processor;
 
+import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.*;
 import com.hazelcast.common.EntryTypeEnum;
@@ -73,54 +74,47 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
         String[] distributedObjectNames = null;
         EntryListenerProxy entryListenerProxy = null;
 
-        try {
-
-            if (obj == null) {
-                obj = clazz.newInstance();
-            }
+        if (obj == null) {
+            obj = HZAware.initialize(clazz);
+        }
 
 
-            Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
+        Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 
-            EntryListener listener = (EntryListener) annotation;
+        EntryListener listener = (EntryListener) annotation;
 
-            EntryTypeEnum[] types = listener.type();
+        EntryTypeEnum[] types = listener.type();
 
-            for (HazelcastInstance instance : allHazelcastInstances) {
+        for (HazelcastInstance instance : allHazelcastInstances) {
 
-                for (EntryTypeEnum type : types) {
+            for (EntryTypeEnum type : types) {
 
-                    entryListenerProxy = new EntryListenerProxy(obj, entryAdded, entryRemoved, entryUpdated, entryEvicted);
+                entryListenerProxy = new EntryListenerProxy(obj, entryAdded, entryRemoved, entryUpdated, entryEvicted);
 
-                    switch (type) {
+                switch (type) {
 
-                        case MAP:
-                            distributedObjectNames = listener.distributedObjectName();
-                            for (String distributedObjectName : distributedObjectNames) {
-                                IMap map = instance.getMap(distributedObjectName);
-                                if (map != null) {
-                                    map.addEntryListener(entryListenerProxy, listener.needsValue());
-                                }
+                    case MAP:
+                        distributedObjectNames = listener.distributedObjectName();
+                        for (String distributedObjectName : distributedObjectNames) {
+                            IMap map = instance.getMap(distributedObjectName);
+                            if (map != null) {
+                                map.addEntryListener(entryListenerProxy, listener.needsValue());
                             }
+                        }
 
-                            break;
+                        break;
 
-                        case MULTI_MAP:
-                            distributedObjectNames = listener.distributedObjectName();
-                            for (String distributedObjectName : distributedObjectNames) {
-                                MultiMap multiMap = instance.getMultiMap(distributedObjectName);
-                                if (multiMap != null) {
-                                    multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
-                                }
+                    case MULTI_MAP:
+                        distributedObjectNames = listener.distributedObjectName();
+                        for (String distributedObjectName : distributedObjectNames) {
+                            MultiMap multiMap = instance.getMultiMap(distributedObjectName);
+                            if (multiMap != null) {
+                                multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
-        } catch (InstantiationException e) {
-            throw new HazelcastExtraException("Cannot create " + clazz.getName() + " instance", e);
-        } catch (IllegalAccessException e) {
-            throw new HazelcastExtraException("Cannot call " + clazz.getName() + " constructor", e);
         }
     }
 
