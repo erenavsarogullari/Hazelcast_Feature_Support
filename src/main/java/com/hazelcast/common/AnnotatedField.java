@@ -31,4 +31,11 @@ public class AnnotatedField {
     public Annotation getAnnotation() {
         return annotation;
     }
+
+	@Override
+	public String toString() {
+		return "AnnotatedField [supportedAnnotatiton=" + supportedAnnotatiton
+				+ ", field=" + field + ", annotation=" + annotation + "]";
+	}    
+    
 }

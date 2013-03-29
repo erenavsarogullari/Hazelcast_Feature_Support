@@ -5,24 +5,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hazelcast.common.SystemConstants;
-
 /**
- * Hazelcast IQueue Annotation Interface
+ * Hazelcast ILock Annotation Interface
  *
  * @author Eren Avsarogullari
  * @author Yusuf Soysal
- * @since 17 March 2013
+ * @since 25 March 2013
  * @version 1.0.0
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface IQueue {
-
-	String instanceName();
-	String name();
-	int maxSizePerJvm() default 0;
-	String backingMapRef() default SystemConstants.DEFAULT;
+public @interface ILock {
 	
+	String instanceName();
+	Class<?> lockedObject();
 }

@@ -1,6 +1,9 @@
 package com.hazelcast.annotation.processor;
 
-import com.hazelcast.annotation.builder.HZAware;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.HashSet;
+
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.configuration.*;
 import com.hazelcast.common.HazelcastCommonData;
@@ -9,10 +12,6 @@ import com.hazelcast.config.*;
 import com.hazelcast.config.Interfaces;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.srv.IHazelcastService;
-
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Date: 22/03/2013 15:27
@@ -140,6 +139,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     }
 
     private void setInterfacesConfig(NetworkConfig nwConfig, com.hazelcast.annotation.configuration.Interfaces interfaces ){
+
         Interfaces nwInterfaces = nwConfig.getInterfaces();
         nwInterfaces.setEnabled(interfaces.enabled());
         

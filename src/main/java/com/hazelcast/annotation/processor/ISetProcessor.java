@@ -2,11 +2,9 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.ISet;
-import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -28,17 +26,16 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
         ISet setAnnotation = (ISet) annotation;
 
 		try {
-            /*
-             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
-             * I'm not changing it right now because probably you already did this :)
-             */
-
-			Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-			for(HazelcastInstance instance : hazelcastInstances) {
-				com.hazelcast.core.ISet<Object> distributedSet = instance.getSet(setAnnotation.name());
-				field.setAccessible(true);
-				field.set(obj, distributedSet);
-			}
+			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(setAnnotation.instanceName());
+        	
+			if(hazelcastInstance == null) {
+            	throw new HazelcastExtraException("HazelcastInstance " + setAnnotation.instanceName() + "must not be null");
+            }
+        	
+    		com.hazelcast.core.ISet<Object> distributedSet = hazelcastInstance.getSet(setAnnotation.name());
+			field.setAccessible(true);
+			field.set(obj, distributedSet);
+			
         } catch (IllegalArgumentException e) {
             throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {

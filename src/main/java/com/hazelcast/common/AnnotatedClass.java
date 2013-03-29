@@ -28,4 +28,11 @@ public class AnnotatedClass {
     public Annotation getAnnotation() {
         return annotation;
     }
+
+	@Override
+	public String toString() {
+		return "AnnotatedClass [supportedAnnotation=" + supportedAnnotation
+				+ ", clazz=" + clazz + ", annotation=" + annotation + "]";
+	}    
+    
 }

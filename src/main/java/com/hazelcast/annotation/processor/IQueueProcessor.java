@@ -2,11 +2,9 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Set;
 
 import com.hazelcast.annotation.builder.HazelcastFieldAnnotationProcessor;
 import com.hazelcast.annotation.data.IQueue;
-import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -28,19 +26,18 @@ public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
         IQueue queueAnnotation = (IQueue) annotation;
 
         try {
-            /*
-             * TODO: call the method below. Instead of looping all instances, just use the instance developer wants to use
-             * I'm not changing it right now because probably you already did this :)
-             */
-
-            Set<HazelcastInstance> hazelcastInstances = hazelcastService.getAllHazelcastInstances();
-            for(HazelcastInstance instance : hazelcastInstances) {
-                com.hazelcast.core.IQueue<Object> distributedQueue = instance.getQueue(queueAnnotation.name());
-                if(distributedQueue != null) {
-                    field.setAccessible(true);
-                    field.set(obj, distributedQueue);
-                }
+        	HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(queueAnnotation.instanceName());
+        	
+        	if(hazelcastInstance == null) {
+            	throw new HazelcastExtraException("HazelcastInstance " + queueAnnotation.instanceName() + "must not be null");
             }
+        	
+            com.hazelcast.core.IQueue<Object> distributedQueue = hazelcastInstance.getQueue(queueAnnotation.name());
+            if(distributedQueue != null) {
+                field.setAccessible(true);
+                field.set(obj, distributedQueue);
+            }
+            
         } catch (IllegalArgumentException e) {
             throw new HazelcastExtraException("Cannot set value to  " + obj.getClass().getName() + "'s " + field.getName() + " field", e);
         } catch (IllegalAccessException e) {

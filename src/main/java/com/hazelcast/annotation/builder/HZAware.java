@@ -2,11 +2,9 @@ package com.hazelcast.annotation.builder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.common.HazelcastExtraException;
-import com.hazelcast.util.ConcurrentHashSet;
 
 /**
  * Date: 24/03/2013 13:22

@@ -20,6 +20,7 @@ import com.hazelcast.common.EvictionPolicyEnum;
 @Target(ElementType.FIELD)
 public @interface IMap {
 
+	String instanceName();
 	String name();
 	int backupCount() default 1;
 	int asyncBackupCount() default 1;

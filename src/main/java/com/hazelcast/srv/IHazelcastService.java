@@ -65,4 +65,6 @@ public interface IHazelcastService {
      * @see #getFirstHazelcastInstance()
      */
     HazelcastInstance getCurrentHazelcastInstance(String name);
+    
+    HazelcastInstance newHazelcastInstance(Config config);
 }

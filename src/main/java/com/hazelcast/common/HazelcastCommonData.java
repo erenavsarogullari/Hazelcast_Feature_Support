@@ -14,7 +14,7 @@ public class HazelcastCommonData {
 
     private static String hzInstanceName = null;
 
-    public static boolean eligibleForParsing(Class<?> clz){
+    public static boolean isEligibleForParsing(Class<?> clz){
         return !parsedClasses.contains(clz);
     }
 
