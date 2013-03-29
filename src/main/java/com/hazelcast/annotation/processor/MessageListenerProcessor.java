@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
@@ -64,43 +65,36 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
         String[] distributedObjectNames = null;
         MessageListenerProxy messageListenerProxy = null;
 
-        try {
-
-            if (obj == null) {
-                obj = clazz.newInstance();
-            }
+        if (obj == null) {
+            obj = HZAware.initialize(clazz);
+        }
 
 
-            Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
+        Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 
-            MessageListener listener = (MessageListener) annotation;
+        MessageListener listener = (MessageListener) annotation;
 
-            MessageTypeEnum[] types = listener.type();
+        MessageTypeEnum[] types = listener.type();
 
-            for (HazelcastInstance instance : allHazelcastInstances) {
+        for (HazelcastInstance instance : allHazelcastInstances) {
 
-                for (MessageTypeEnum type : types) {
+            for (MessageTypeEnum type : types) {
 
-                    messageListenerProxy = new MessageListenerProxy(obj, onMessage);
+                messageListenerProxy = new MessageListenerProxy(obj, onMessage);
 
-                    switch (type) {
+                switch (type) {
 
-                        case TOPIC:
-                            distributedObjectNames = listener.distributedObjectName();
-                            for (String distributedObjectName : distributedObjectNames) {
-                                ITopic topic = instance.getTopic(distributedObjectName);
-                                if (topic != null) {
-                                	topic.addMessageListener(messageListenerProxy);
-                                }
+                    case TOPIC:
+                        distributedObjectNames = listener.distributedObjectName();
+                        for (String distributedObjectName : distributedObjectNames) {
+                            ITopic topic = instance.getTopic(distributedObjectName);
+                            if (topic != null) {
+                                topic.addMessageListener(messageListenerProxy);
                             }
+                        }
 
-                            break;                    }
-                }
+                        break;                    }
             }
-        } catch (InstantiationException e) {
-            throw new HazelcastExtraException("Cannot create " + clazz.getName() + " instance", e);
-        } catch (IllegalAccessException e) {
-            throw new HazelcastExtraException("Cannot call " + clazz.getName() + " constructor", e);
         }
     }
 
