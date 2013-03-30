@@ -8,7 +8,6 @@ import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
-import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.common.MessageTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;

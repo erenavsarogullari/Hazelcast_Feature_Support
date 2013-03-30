@@ -5,11 +5,10 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import com.hazelcast.annotation.builder.HZAware;
+import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.ItemRemoved;
-import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
-import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;

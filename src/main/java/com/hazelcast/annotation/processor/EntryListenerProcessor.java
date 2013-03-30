@@ -1,19 +1,22 @@
 package com.hazelcast.annotation.processor;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Set;
+
 import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
-import com.hazelcast.annotation.listener.*;
+import com.hazelcast.annotation.listener.EntryAdded;
+import com.hazelcast.annotation.listener.EntryEvicted;
+import com.hazelcast.annotation.listener.EntryListener;
+import com.hazelcast.annotation.listener.EntryRemoved;
+import com.hazelcast.annotation.listener.EntryUpdated;
 import com.hazelcast.common.EntryTypeEnum;
-import com.hazelcast.common.HazelcastExtraException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
 import com.hazelcast.listener.proxy.EntryListenerProxy;
 import com.hazelcast.srv.IHazelcastService;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Set;
 
 /**
  * Hazelcast EntryListener Annotation Processor

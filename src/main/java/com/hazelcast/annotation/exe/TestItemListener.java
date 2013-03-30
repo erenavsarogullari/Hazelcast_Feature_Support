@@ -1,5 +1,6 @@
 package com.hazelcast.annotation.exe;
 
+import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.common.ItemTypeEnum;
@@ -14,6 +15,7 @@ import com.hazelcast.core.ItemEvent;
  * @version 1.0.0
  *
  */
+@HazelcastAware
 @ItemListener(distributedObjectName ={"testList", "testList2", "testSet", "testSet2", "testQueue", "testQueue2"}, 
 								type = {ItemTypeEnum.LIST, ItemTypeEnum.SET, ItemTypeEnum.QUEUE}, 
 								needsValue=true)
