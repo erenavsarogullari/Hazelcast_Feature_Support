@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hazelcast.common.MessageTypeEnum;
-
 /**
  * Hazelcast MessageListener Annotation Interface
  *
@@ -20,7 +18,6 @@ import com.hazelcast.common.MessageTypeEnum;
 @Target(ElementType.TYPE)
 public @interface MessageListener {
 
-	MessageTypeEnum[] type();
 	String[] distributedObjectName();
 
 }

@@ -11,7 +11,6 @@ import com.hazelcast.annotation.listener.EntryEvicted;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.listener.EntryRemoved;
 import com.hazelcast.annotation.listener.EntryUpdated;
-import com.hazelcast.common.EntryTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
@@ -31,7 +30,7 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
 
     @Override
     public boolean canBeProcessedMoreThanOnce() {
-        return false;
+        return true;
     }
 
     @Override
@@ -74,51 +73,34 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     private void addEntryListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method entryAdded, Method entryRemoved, Method entryUpdated, Method entryEvicted) {
-        String[] distributedObjectNames = null;
         EntryListenerProxy entryListenerProxy = null;
 
         if (obj == null) {
             obj = HZAware.initialize(clazz);
         }
 
-
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 
         EntryListener listener = (EntryListener) annotation;
+        
+		for (HazelcastInstance instance : allHazelcastInstances) {
 
-        EntryTypeEnum[] types = listener.type();
+			entryListenerProxy = new EntryListenerProxy(obj, entryAdded, entryRemoved, entryUpdated, entryEvicted);
 
-        for (HazelcastInstance instance : allHazelcastInstances) {
+			String[] distributedObjectNames = listener.distributedObjectName();
+			for (String distributedObjectName : distributedObjectNames) {
+				IMap map = instance.getMap(distributedObjectName);
+				if (map != null) {
+					map.addEntryListener(entryListenerProxy, listener.needsValue());
+				}
 
-            for (EntryTypeEnum type : types) {
+				MultiMap multiMap = instance.getMultiMap(distributedObjectName);
+				if (multiMap != null) {
+					multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
+				}
+			}
 
-                entryListenerProxy = new EntryListenerProxy(obj, entryAdded, entryRemoved, entryUpdated, entryEvicted);
-
-                switch (type) {
-
-                    case MAP:
-                        distributedObjectNames = listener.distributedObjectName();
-                        for (String distributedObjectName : distributedObjectNames) {
-                            IMap map = instance.getMap(distributedObjectName);
-                            if (map != null) {
-                                map.addEntryListener(entryListenerProxy, listener.needsValue());
-                            }
-                        }
-
-                        break;
-
-                    case MULTI_MAP:
-                        distributedObjectNames = listener.distributedObjectName();
-                        for (String distributedObjectName : distributedObjectNames) {
-                            MultiMap multiMap = instance.getMultiMap(distributedObjectName);
-                            if (multiMap != null) {
-                                multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
-                            }
-                        }
-                        break;
-                }
-            }
-        }
+		}
     }
 
     private enum EntryListenerEnum {

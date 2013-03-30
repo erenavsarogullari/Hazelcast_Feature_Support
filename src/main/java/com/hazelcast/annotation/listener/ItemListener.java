@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hazelcast.common.ItemTypeEnum;
-
 /**
  * Hazelcast ItemListener Annotation Interface
  *
@@ -20,7 +18,6 @@ import com.hazelcast.common.ItemTypeEnum;
 @Target(ElementType.TYPE)
 public @interface ItemListener {
 
-	ItemTypeEnum[] type();
 	String[] distributedObjectName();
 	boolean needsValue() default false;
 	

@@ -4,13 +4,14 @@ package com.hazelcast.annotation.builder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import com.hazelcast.common.AnnotatedClass;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.ClasspathScanEventListener;
 import com.hazelcast.common.ClasspathScanner;
 import com.hazelcast.common.HazelcastCommonData;
+import com.hazelcast.common.PriorityComparator;
 import com.hazelcast.srv.HazelcastService;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -25,7 +26,7 @@ import com.hazelcast.srv.IHazelcastService;
  */
 public class HazelcastAnnotationBuilder {
 
-    private static Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentHashMap<Annotations.SupportedAnnotation, List<Class<?>>>();
+    private static Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentSkipListMap<Annotations.SupportedAnnotation, List<Class<?>>>(new PriorityComparator());
     private static IHazelcastService hazelcastService = new HazelcastService();
 
     public static void build(String packageName) {
@@ -39,7 +40,7 @@ public class HazelcastAnnotationBuilder {
     }
 
     private static void fireEvents() {
-        for( Map.Entry<Annotations.SupportedAnnotation, List<Class<?>>> entry : classMap.entrySet() ){
+    	for(Map.Entry<Annotations.SupportedAnnotation, List<Class<?>>> entry : classMap.entrySet()){
             
         	Annotations.SupportedAnnotation supportedAnnotation = entry.getKey();
 

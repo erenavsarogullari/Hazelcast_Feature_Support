@@ -9,7 +9,6 @@ import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.ItemRemoved;
-import com.hazelcast.common.ItemTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IQueue;
@@ -30,7 +29,7 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 
     @Override
     public boolean canBeProcessedMoreThanOnce() {
-        return false;
+        return true;
     }
 
     @Override
@@ -67,9 +66,7 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 	
 	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		
-		ItemListenerProxy itemListenerProxy = null;
-
-        if( obj == null ){
+		if( obj == null ){
             obj = HZAware.initialize(clazz);
         }
 
@@ -77,49 +74,28 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 
         ItemListener listener = (ItemListener) annotation;
 
-        for (HazelcastInstance instance : allHazelcastInstances) {
+		for (HazelcastInstance instance : allHazelcastInstances) {
 
-            String[] distributedObjectNames = null;
-            ItemTypeEnum[] types = listener.type();
+			ItemListenerProxy itemListenerProxy = new ItemListenerProxy(obj, itemAdded, itemRemoved);
 
-            for (ItemTypeEnum type : types) {
+			String[] distributedObjectNames = listener.distributedObjectName();
+			for (String distributedObjectName : distributedObjectNames) {
+				IList list = instance.getList(distributedObjectName);
+				if (list != null) {
+					list.addItemListener(itemListenerProxy, listener.needsValue());
+				}
 
-                itemListenerProxy = new ItemListenerProxy(obj, itemAdded, itemRemoved);
+				IQueue queue = instance.getQueue(distributedObjectName);
+				if (queue != null) {
+					queue.addItemListener(itemListenerProxy, listener.needsValue());
+				}
 
-                switch (type) {
-
-                case LIST:
-                    distributedObjectNames = listener.distributedObjectName();
-                    for (String distributedObjectName : distributedObjectNames) {
-                        IList list = instance.getList(distributedObjectName);
-                        if (list != null) {
-                            list.addItemListener(itemListenerProxy, listener.needsValue());
-                        }
-                    }
-                    break;
-
-                case QUEUE:
-                    distributedObjectNames = listener.distributedObjectName();
-                    for (String distributedObjectName : distributedObjectNames) {
-                        IQueue queue = instance.getQueue(distributedObjectName);
-                        if (queue != null) {
-                            queue.addItemListener(itemListenerProxy, listener.needsValue());
-                        }
-                    }
-                    break;
-
-                case SET:
-                    distributedObjectNames = listener.distributedObjectName();
-                    for (String distributedObjectName : distributedObjectNames) {
-                        ISet set = instance.getSet(distributedObjectName);
-                        if (set != null) {
-                            set.addItemListener(itemListenerProxy, listener.needsValue());
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+				ISet set = instance.getSet(distributedObjectName);
+				if (set != null) {
+					set.addItemListener(itemListenerProxy, listener.needsValue());
+				}
+			}
+		}
 	}
 	
 	private enum ItemListenerEnum {

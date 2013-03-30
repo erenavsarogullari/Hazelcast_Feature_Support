@@ -29,23 +29,33 @@ public class Annotations {
 
     public enum SupportedAnnotation {
 
-        CONFIGURATION(Configuration.class, new ConfigurationProcessor()),
-        HAZELCASTAWARE(HazelcastAware.class, new HazelcastAwareProcessor()),
-        ITEM_LISTENER(ItemListener.class, new ItemListenerProcessor()),
-        ENTRY_LISTENER(EntryListener.class, new EntryListenerProcessor()),
-        MEMBERSHIP_LISTENER(MembershipListener.class, new MembershipListenerProcessor()),
-        MESSAGE_LISTENER(MessageListener.class, new MessageListenerProcessor());
+        CONFIGURATION(Configuration.class, new ConfigurationProcessor(), 1),
+        HAZELCASTAWARE(HazelcastAware.class, new HazelcastAwareProcessor(), 2),
+        ITEM_LISTENER(ItemListener.class, new ItemListenerProcessor(), 3),
+        ENTRY_LISTENER(EntryListener.class, new EntryListenerProcessor(), 4),
+        MEMBERSHIP_LISTENER(MembershipListener.class, new MembershipListenerProcessor(), 5),
+        MESSAGE_LISTENER(MessageListener.class, new MessageListenerProcessor(), 6);
 
         private Class<?> clz;
         private HazelcastAnnotationProcessor processor;
-
-        SupportedAnnotation(Class<?> clz, HazelcastAnnotationProcessor processor) {
+        private int priority;
+        
+        SupportedAnnotation(Class<?> clz, HazelcastAnnotationProcessor processor, int priority) {
             this.clz = clz;
             this.processor = processor;
+            this.priority = priority;
         }
 
         public Class<?> getClassType() {
             return clz;
+        }
+        
+        public HazelcastAnnotationProcessor getProcessor() {
+            return processor;
+        }
+        
+        public int getPriority() {
+            return priority;
         }
 
         public static List<AnnotatedClass> getAnnotatedClassList(Class<?> clz) {
@@ -61,10 +71,7 @@ public class Annotations {
 
             return annotatedClassList;
         }
-
-        public HazelcastAnnotationProcessor getProcessor() {
-            return processor;
-        }
+        
     }
 
     public enum SupportedFieldAnnotation {

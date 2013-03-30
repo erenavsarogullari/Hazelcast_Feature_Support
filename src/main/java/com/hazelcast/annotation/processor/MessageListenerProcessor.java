@@ -8,7 +8,6 @@ import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
-import com.hazelcast.common.MessageTypeEnum;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.listener.proxy.MessageListenerProxy;
@@ -27,7 +26,7 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
 
     @Override
     public boolean canBeProcessedMoreThanOnce() {
-        return false;
+        return true;
     }
 
     @Override
@@ -61,40 +60,26 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     private void addMessageListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method onMessage) {
-        String[] distributedObjectNames = null;
-        MessageListenerProxy messageListenerProxy = null;
-
         if (obj == null) {
             obj = HZAware.initialize(clazz);
         }
-
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
 
         MessageListener listener = (MessageListener) annotation;
 
-        MessageTypeEnum[] types = listener.type();
+		for (HazelcastInstance instance : allHazelcastInstances) {
 
-        for (HazelcastInstance instance : allHazelcastInstances) {
+			MessageListenerProxy messageListenerProxy = new MessageListenerProxy(obj, onMessage);
 
-            for (MessageTypeEnum type : types) {
-
-                messageListenerProxy = new MessageListenerProxy(obj, onMessage);
-
-                switch (type) {
-
-                    case TOPIC:
-                        distributedObjectNames = listener.distributedObjectName();
-                        for (String distributedObjectName : distributedObjectNames) {
-                            ITopic topic = instance.getTopic(distributedObjectName);
-                            if (topic != null) {
-                                topic.addMessageListener(messageListenerProxy);
-                            }
-                        }
-
-                        break;                    }
-            }
-        }
+			String[] distributedObjectNames = listener.distributedObjectName();
+			for (String distributedObjectName : distributedObjectNames) {
+				ITopic topic = instance.getTopic(distributedObjectName);
+				if (topic != null) {
+					topic.addMessageListener(messageListenerProxy);
+				}
+			}
+		}
     }
 
     private enum MessageListenerEnum {
