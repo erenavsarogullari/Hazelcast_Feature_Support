@@ -26,20 +26,38 @@ import com.hazelcast.srv.IHazelcastService;
  */
 public class HazelcastAnnotationBuilder {
 
-    private static Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentSkipListMap<Annotations.SupportedAnnotation, List<Class<?>>>(new PriorityComparator());
-    private static IHazelcastService hazelcastService = new HazelcastService();
+    private static final HazelcastAnnotationBuilder INSTANCE = new HazelcastAnnotationBuilder();
+
+    private Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentSkipListMap<Annotations.SupportedAnnotation, List<Class<?>>>(new PriorityComparator());
+    private IHazelcastService hazelcastService = new HazelcastService();
 
     public static void build(String packageName) {
-        ClasspathScanner.scanClasspathForPackage(packageName, new ClasspathScannerImpl());
-        fireEvents();
+        INSTANCE.buildPackage(packageName);
     }
 
     public static void parseObjectAnnotations(Object obj) {
+        INSTANCE.buildObjectAnnotations(obj);
+    }
+
+    public static HazelcastAnnotationBuilder getInstance(){
+        return INSTANCE;
+    }
+
+    public void buildPackage(String packageName){
+        ClasspathScanner.scanClasspathForPackage(packageName, getClasspathScanner());
+        fireEvents();
+    }
+
+    public void buildObjectAnnotations(Object obj) {
         List<AnnotatedClass> annotatedClassList = Annotations.SupportedAnnotation.getAnnotatedClassList(obj.getClass());
         fireEventsForObject(obj, annotatedClassList);
     }
 
-    private static void fireEvents() {
+    public ClasspathScannerImpl getClasspathScanner(){
+        return new ClasspathScannerImpl();
+    }
+
+    public void fireEvents() {
     	for(Map.Entry<Annotations.SupportedAnnotation, List<Class<?>>> entry : classMap.entrySet()){
             
         	Annotations.SupportedAnnotation supportedAnnotation = entry.getKey();
@@ -57,7 +75,7 @@ public class HazelcastAnnotationBuilder {
         }
     }
 
-    private static void fireEventsForObject(Object obj, List<AnnotatedClass> supportedAnnotationsList) {
+    public void fireEventsForObject(Object obj, List<AnnotatedClass> supportedAnnotationsList) {
         boolean eligible = HazelcastCommonData.isEligibleForParsing(obj.getClass());
 
         for (AnnotatedClass annotatedClass : supportedAnnotationsList) {
@@ -71,7 +89,7 @@ public class HazelcastAnnotationBuilder {
         HazelcastCommonData.classParsed(obj.getClass());
     }
 
-    private static class ClasspathScannerImpl implements ClasspathScanEventListener {
+    public class ClasspathScannerImpl implements ClasspathScanEventListener {
 
         @Override
         public void classFound(Class<?> clazz) {

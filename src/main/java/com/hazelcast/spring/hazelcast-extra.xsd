@@ -1,0 +1,13 @@
+<xsd:schema xmlns="http://www.hazelcast.com/extra/schema/spring"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.hazelcast.com/extra/schema/spring"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+   
+   <xsd:element name="annotation-support">
+    <xsd:complexType>
+      <xsd:attribute name="package" type="xsd:string" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>
