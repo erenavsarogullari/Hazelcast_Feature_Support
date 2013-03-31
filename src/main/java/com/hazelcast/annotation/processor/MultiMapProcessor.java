@@ -25,7 +25,7 @@ public class MultiMapProcessor implements HazelcastFieldAnnotationProcessor {
     	MultiMap multiMapAnnotation = (MultiMap) annotation;
 
 		try {
-			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(multiMapAnnotation.instanceName());
+			HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(multiMapAnnotation.instanceName());
         	
         	if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + multiMapAnnotation.instanceName() + "must not be null");

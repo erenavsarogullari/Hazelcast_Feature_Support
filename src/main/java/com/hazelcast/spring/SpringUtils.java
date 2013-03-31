@@ -1,14 +1,14 @@
 package com.hazelcast.spring;
 
-import com.hazelcast.common.ClasspathScanEventListener;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.ParserContext;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.util.ClassUtils;
+
+import com.hazelcast.common.ClasspathScanEventListener;
 
 /**
  * Date: 31/03/2013 12:50
@@ -16,7 +16,7 @@ import org.springframework.util.ClassUtils;
  */
 public class SpringUtils {
 
-    public void registerNewBean(ParserContext pc, Class<?> clz) {
+    public static void registerNewBean(ParserContext pc, Class<?> clz) {
         BeanDefinitionRegistry registry = pc.getRegistry();
         BeanDefinition definition = new RootBeanDefinition(clz);
         String beanName = SpringConstants.BEAN_NAME_PREFIX + clz.getName();

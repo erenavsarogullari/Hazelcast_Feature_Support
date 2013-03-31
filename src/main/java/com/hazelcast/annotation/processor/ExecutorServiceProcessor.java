@@ -25,7 +25,7 @@ public class ExecutorServiceProcessor implements HazelcastFieldAnnotationProcess
         IExecutorService executorAnnotation = (IExecutorService) annotation;
 
         try {
-        	HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(executorAnnotation.instanceName());
+        	HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(executorAnnotation.instanceName());
         	
         	if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + executorAnnotation.instanceName() + "must not be null");

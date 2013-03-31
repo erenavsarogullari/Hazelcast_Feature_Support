@@ -26,7 +26,7 @@ public class IMapProcessor implements HazelcastFieldAnnotationProcessor {
     	IMap mapAnnotation = (IMap) annotation;
 
 		try {
-			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(mapAnnotation.instanceName());
+			HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(mapAnnotation.instanceName());
             
 			if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + mapAnnotation.instanceName() + "must not be null");

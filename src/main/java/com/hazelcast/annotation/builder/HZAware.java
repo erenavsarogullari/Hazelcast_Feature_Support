@@ -32,7 +32,8 @@ public class HZAware {
                 Constructor<T> constructor = clz.getConstructor(clzTypes);
                 instance = constructor.newInstance(args);
             }else {
-                HazelcastAnnotationBuilder.getObjectCreator().createInstance(clz);
+                //HazelcastAnnotationBuilder.getObjectCreator().createInstance(clz);
+            	instance = clz.newInstance();
             }
 
             HazelcastAnnotationBuilder.parseObjectAnnotations(instance);

@@ -26,7 +26,8 @@ public class IListProcessor implements HazelcastFieldAnnotationProcessor {
         IList listAnnotation = (IList) annotation;
 
         try {
-        	HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(listAnnotation.instanceName());
+        	
+        	HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(listAnnotation.instanceName());
         	
         	if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + listAnnotation.instanceName() + "must not be null");

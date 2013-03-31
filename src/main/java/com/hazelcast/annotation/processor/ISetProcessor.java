@@ -26,7 +26,7 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
         ISet setAnnotation = (ISet) annotation;
 
 		try {
-			HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(setAnnotation.instanceName());
+			HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(setAnnotation.instanceName());
         	
 			if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + setAnnotation.instanceName() + "must not be null");

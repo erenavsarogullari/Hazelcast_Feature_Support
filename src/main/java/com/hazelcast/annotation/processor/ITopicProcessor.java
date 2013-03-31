@@ -26,7 +26,7 @@ public class ITopicProcessor implements HazelcastFieldAnnotationProcessor {
     	ITopic topicAnnotation = (ITopic) annotation;
 
         try {
-        	HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(topicAnnotation.instanceName());
+        	HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(topicAnnotation.instanceName());
         	
         	if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + topicAnnotation.instanceName() + "must not be null");

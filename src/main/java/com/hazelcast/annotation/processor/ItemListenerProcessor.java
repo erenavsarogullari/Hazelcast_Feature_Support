@@ -68,7 +68,16 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 	
 	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		if( obj == null ){
-            obj = HZAware.initialize(clazz);
+           // obj = HZAware.initialize(clazz);
+			try {
+				obj = clazz.newInstance();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();

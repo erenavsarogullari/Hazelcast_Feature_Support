@@ -26,7 +26,7 @@ public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
         IQueue queueAnnotation = (IQueue) annotation;
 
         try {
-        	HazelcastInstance hazelcastInstance = hazelcastService.getHazelcastInstanceByName(queueAnnotation.instanceName());
+        	HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(queueAnnotation.instanceName());
         	
         	if(hazelcastInstance == null) {
             	throw new HazelcastExtraException("HazelcastInstance " + queueAnnotation.instanceName() + "must not be null");

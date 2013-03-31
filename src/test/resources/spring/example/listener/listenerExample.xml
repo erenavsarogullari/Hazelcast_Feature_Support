@@ -8,4 +8,6 @@
 
     <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.listener"/>
 
+	<bean id="hzSpringListenerExample" class="com.hazelcast.annotation.spring.example.listener.HZSpringListenerExample"/>
+
 </beans>

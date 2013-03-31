@@ -1,13 +1,14 @@
 package com.hazelcast.spring;
 
-import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
-import com.hazelcast.common.ObjectCreator;
-import com.hazelcast.spring.beans.ApplicationContextListener;
-import com.hazelcast.spring.beans.SpringEventListener;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
+
+import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
+import com.hazelcast.common.ObjectCreator;
+import com.hazelcast.spring.beans.ApplicationContextListener;
+import com.hazelcast.spring.beans.SpringEventListener;
 
 /**
  * Date: 31/03/2013 12:44
@@ -40,6 +41,6 @@ public class HazelcastSpringAnnotationSupport implements BeanDefinitionParser, O
 
     @Override
     public <T> T createInstance(Class<T> clz) throws IllegalAccessException, InstantiationException {
-        return SpringUtils.registerNewBean(parserContext, clz);
+        return null;
     }
 }
