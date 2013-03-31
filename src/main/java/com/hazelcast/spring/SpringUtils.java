@@ -16,13 +16,11 @@ import org.springframework.util.ClassUtils;
  */
 public class SpringUtils {
 
-    public static <T> T registerNewBean(ParserContext pc, Class<T> clz) {
+    public void registerNewBean(ParserContext pc, Class<?> clz) {
         BeanDefinitionRegistry registry = pc.getRegistry();
         BeanDefinition definition = new RootBeanDefinition(clz);
         String beanName = SpringConstants.BEAN_NAME_PREFIX + clz.getName();
         registry.registerBeanDefinition(beanName, definition);
-
-        return (T) ((ApplicationContext) pc.getReaderContext().getReader().getResourceLoader()).getBean(beanName);
     }
 
     public static final void findClasses(String basePackage, ClasspathScanEventListener eventListener) {
