@@ -2,6 +2,7 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
 
 import com.hazelcast.annotation.builder.HZAware;
@@ -71,12 +72,14 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
 
 			MessageListenerProxy messageListenerProxy = new MessageListenerProxy(obj, onMessage);
 
-			String[] distributedObjectNames = listener.distributedObjectName();
+			String[] distributedObjectNames = listener.name();
 			for (String distributedObjectName : distributedObjectNames) {
-				ITopic topic = instance.getTopic(distributedObjectName);
-				if (topic != null) {
-					topic.addMessageListener(messageListenerProxy);
-				}
+				if(listener.type().getMessageListenerType() == ITopic.class) {
+					ITopic topic = instance.getTopic(distributedObjectName);
+					if (topic != null) {
+						topic.addMessageListener(messageListenerProxy);
+					}
+				}				
 			}
 		}
     }

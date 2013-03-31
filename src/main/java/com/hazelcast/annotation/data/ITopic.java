@@ -20,7 +20,7 @@ import com.hazelcast.common.SystemConstants;
 @Target(ElementType.FIELD)
 public @interface ITopic {
 
-	String instanceName();
+	String instanceName() default "";
 	String name() default SystemConstants.DEFAULT;
 	
 }

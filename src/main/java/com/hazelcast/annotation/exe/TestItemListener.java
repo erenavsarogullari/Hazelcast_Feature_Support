@@ -5,6 +5,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.core.ItemEvent;
 
+import com.hazelcast.common.ItemListenerTypeEnum;;
 /**
  * Test Item Listener Class
  *
@@ -15,8 +16,8 @@ import com.hazelcast.core.ItemEvent;
  *
  */
 @HazelcastAware
-@ItemListener(distributedObjectName ={"testList", "testList2", "testSet", 
-		                                "testSet2", "testQueue", "testQueue2"},	needsValue=true)
+@ItemListener(name ={"testList", "testList2", "testSet", 
+		                                "testSet2", "testQueue", "testQueue2"},	type=ItemListenerTypeEnum.LIST, needsValue=true)
 public class TestItemListener {	
 	
 	@ItemAdded

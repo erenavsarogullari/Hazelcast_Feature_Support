@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ISet {
 
-	String instanceName();
+	String instanceName() default "";
 	String name();
 	
 }

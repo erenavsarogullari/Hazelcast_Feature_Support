@@ -2,6 +2,8 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import com.hazelcast.annotation.builder.HZAware;
@@ -77,22 +79,28 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 
 			ItemListenerProxy itemListenerProxy = new ItemListenerProxy(obj, itemAdded, itemRemoved);
 
-			String[] distributedObjectNames = listener.distributedObjectName();
+			String[] distributedObjectNames = listener.name();
 			for (String distributedObjectName : distributedObjectNames) {
-				IList list = instance.getList(distributedObjectName);
-				if (list != null) {
-					list.addItemListener(itemListenerProxy, listener.needsValue());
-				}
+				if(listener.type().getItemListenerType() == List.class) {
+					IList list = instance.getList(distributedObjectName);
+					if (list != null) {
+						list.addItemListener(itemListenerProxy, listener.needsValue());
+					}
+				}				
 
-				IQueue queue = instance.getQueue(distributedObjectName);
-				if (queue != null) {
-					queue.addItemListener(itemListenerProxy, listener.needsValue());
+				if(listener.type().getItemListenerType() == Set.class) {
+					ISet set = instance.getSet(distributedObjectName);
+					if (set != null) {
+						set.addItemListener(itemListenerProxy, listener.needsValue());
+					}
 				}
-
-				ISet set = instance.getSet(distributedObjectName);
-				if (set != null) {
-					set.addItemListener(itemListenerProxy, listener.needsValue());
-				}
+				
+				if(listener.type().getItemListenerType() == Queue.class) {
+					IQueue queue = instance.getQueue(distributedObjectName);
+					if (queue != null) {
+						queue.addItemListener(itemListenerProxy, listener.needsValue());
+					}
+				}				
 			}
 		}
 	}

@@ -18,6 +18,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ILock {
 	
-	String instanceName();
+	String instanceName() default "";
 	Class<?> lockedObject();
 }

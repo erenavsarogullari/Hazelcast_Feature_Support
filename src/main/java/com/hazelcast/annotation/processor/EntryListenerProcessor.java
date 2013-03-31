@@ -2,6 +2,7 @@ package com.hazelcast.annotation.processor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
 
 import com.hazelcast.annotation.builder.HZAware;
@@ -86,17 +87,21 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
 
 			entryListenerProxy = new EntryListenerProxy(obj, entryAdded, entryRemoved, entryUpdated, entryEvicted);
 
-			String[] distributedObjectNames = listener.distributedObjectName();
+			String[] distributedObjectNames = listener.name();
 			for (String distributedObjectName : distributedObjectNames) {
-				IMap map = instance.getMap(distributedObjectName);
-				if (map != null) {
-					map.addEntryListener(entryListenerProxy, listener.needsValue());
-				}
+				if(listener.type().getEntryListenerType() == Map.class) {
+					IMap map = instance.getMap(distributedObjectName);
+					if (map != null) {
+						map.addEntryListener(entryListenerProxy, listener.needsValue());
+					}
+				}				
 
-				MultiMap multiMap = instance.getMultiMap(distributedObjectName);
-				if (multiMap != null) {
-					multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
-				}
+				if(listener.type().getEntryListenerType() == MultiMap.class) {
+					MultiMap multiMap = instance.getMultiMap(distributedObjectName);
+					if (multiMap != null) {
+						multiMap.addEntryListener(entryListenerProxy, listener.needsValue());
+					}
+				}				
 			}
 
 		}

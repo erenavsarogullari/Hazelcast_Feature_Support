@@ -20,7 +20,7 @@ import com.hazelcast.common.SystemConstants;
 @Target(ElementType.FIELD)
 public @interface IQueue {
 
-	String instanceName();
+	String instanceName() default "";
 	String name();
 	int maxSizePerJvm() default 0;
 	String backingMapRef() default SystemConstants.DEFAULT;

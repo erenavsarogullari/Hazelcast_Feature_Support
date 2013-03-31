@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hazelcast.common.EntryListenerTypeEnum;
+
 /**
  * Hazelcast EntryListener Annotation Interface
  *
@@ -18,7 +20,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface EntryListener {
 
-	String[] distributedObjectName();
+	String[] name();
+	EntryListenerTypeEnum type();
 	boolean needsValue() default false;
 
 }

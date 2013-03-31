@@ -3,6 +3,7 @@ package com.hazelcast.annotation.exe;
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
+import com.hazelcast.common.MessageListenerTypeEnum;
 import com.hazelcast.core.Message;
 
 /**
@@ -15,7 +16,7 @@ import com.hazelcast.core.Message;
  *
  */
 @HazelcastAware
-@MessageListener(distributedObjectName = {"testTopic", "testTopic2"})
+@MessageListener(name = {"testTopic", "testTopic2"}, type=MessageListenerTypeEnum.TOPIC)
 public class TestMessageListener {	
 	
 	@OnMessage
