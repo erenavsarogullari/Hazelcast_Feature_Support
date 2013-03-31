@@ -31,7 +31,7 @@ public class HazelcastAwareProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-    public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-    	return null;
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+    	
     }
 }
