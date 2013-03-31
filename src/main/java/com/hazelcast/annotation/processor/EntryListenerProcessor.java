@@ -39,13 +39,11 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-    public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-        return createEntryProcessor(hazelcastService, clazz, null, annotation);
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+        createEntryProcessor(hazelcastService, clazz, null, annotation);
     }
 
-    public Object createEntryProcessor(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation) {
-        Object returnVal = null;
-
+    public void createEntryProcessor(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation) {
         Method entryAdded = null, entryRemoved = null, entryUpdated = null, entryEvicted = null;
         int numberOfMethods = 0;
 
@@ -69,19 +67,15 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
         }
 
         if (numberOfMethods > 0) {
-            returnVal = addEntryListener(hazelcastService, clazz, obj, annotation, entryAdded, entryRemoved, entryUpdated, entryEvicted);
+            addEntryListener(hazelcastService, clazz, obj, annotation, entryAdded, entryRemoved, entryUpdated, entryEvicted);
         }
-
-        return returnVal;
     }
 
-    private Object addEntryListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method entryAdded, Method entryRemoved, Method entryUpdated, Method entryEvicted) {
+    private void addEntryListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method entryAdded, Method entryRemoved, Method entryUpdated, Method entryEvicted) {
         EntryListenerProxy entryListenerProxy = null;
-        Object returnVal = null;
 
         if (obj == null) {
             obj = HZAware.initialize(clazz);
-            returnVal = obj;
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
@@ -106,8 +100,6 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
 			}
 
 		}
-
-        return returnVal;
     }
 
     private enum EntryListenerEnum {

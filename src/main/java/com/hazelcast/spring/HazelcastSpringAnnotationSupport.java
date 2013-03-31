@@ -2,6 +2,8 @@ package com.hazelcast.spring;
 
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.common.ObjectCreator;
+import com.hazelcast.spring.beans.ApplicationContextListener;
+import com.hazelcast.spring.beans.SpringEventListener;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -21,15 +23,17 @@ public class HazelcastSpringAnnotationSupport implements BeanDefinitionParser, O
         // hzaware'leri bulup property'leri inject et. bunun icin springin yarattigi beanleri kullanmak lazim
         // listenerlari bulup bean olarak yarat. bunun icin aramayi hemen yapmak lazim
 
-        findTypeAnnotations(element.getAttribute(SpringConstants.HZ_ATT_ANNOTATION_PACKAGE));
+        SpringUtils.registerNewBean(parserContext, ApplicationContextListener.class);
+        SpringUtils.registerNewBean(parserContext, SpringEventListener.class);
 
+        findTypeAnnotations(element.getAttribute(SpringConstants.HZ_ATT_ANNOTATION_PACKAGE));
 
         return null;
     }
 
     public void findTypeAnnotations(String pck){
         HazelcastAnnotationBuilder builder = HazelcastAnnotationBuilder.getInstance();
-        builder.setObjectCreator(this);
+        //builder.setObjectCreator(this);
         SpringUtils.findClasses(pck, builder.getClasspathScanner());
         builder.fireEvents();
     }

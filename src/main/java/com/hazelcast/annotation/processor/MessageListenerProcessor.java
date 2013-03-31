@@ -35,13 +35,11 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-    public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-        return createMessageProcessor(hazelcastService, clazz, null, annotation);
+    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+        createMessageProcessor(hazelcastService, clazz, null, annotation);
     }
 
-    public Object createMessageProcessor(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation) {
-        Object returnVal = null;
-
+    public void createMessageProcessor(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation) {
         Method onMessage = null;
         int numberOfMethods = 0;
 
@@ -56,18 +54,13 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
         }
 
         if (numberOfMethods > 0) {
-        	returnVal = addMessageListener(hazelcastService, clazz, obj, annotation, onMessage);
+        	addMessageListener(hazelcastService, clazz, obj, annotation, onMessage);
         }
-
-        return returnVal;
     }
 
-    private Object addMessageListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method onMessage) {
-        Object returnVal = null;
-
+    private void addMessageListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method onMessage) {
         if (obj == null) {
             obj = HZAware.initialize(clazz);
-            returnVal = obj;
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
@@ -86,8 +79,6 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
 				}
 			}
 		}
-
-        return returnVal;
     }
 
     private enum MessageListenerEnum {
