@@ -7,6 +7,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
@@ -40,6 +41,7 @@ public class SpringUtils {
         public void findClasses(String basePackage, ClasspathScanEventListener clz) {
             resetFilters(false);
             //addIncludeFilter( new AnnotationTypeFilter(clz));
+            addIncludeFilter(new AssignableTypeFilter(Object.class));
 
             basePackage = basePackage == null ? "" : basePackage;
             for (BeanDefinition candidate : findCandidateComponents(basePackage)) {
