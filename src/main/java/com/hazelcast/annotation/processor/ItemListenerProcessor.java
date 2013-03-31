@@ -38,11 +38,13 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-        createItemListener(hazelcastService, clazz, null, annotation);
+	public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+        return createItemListener(hazelcastService, clazz, null, annotation);
 	}
 
-    private void createItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation){
+    private Object createItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation){
+        Object returnVal = null;
+
         Method itemAdded = null, itemRemoved = null;
         int numberOfMethods = 0;
 
@@ -60,14 +62,18 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
         }
 
         if (numberOfMethods > 0) {
-            addItemListener(hazelcastService, clazz, obj, annotation, itemAdded, itemRemoved);
+            returnVal = addItemListener(hazelcastService, clazz, obj, annotation, itemAdded, itemRemoved);
         }
+
+        return returnVal;
     }
 	
-	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
-		
+	private Object addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
+		Object returnVal = null;
+
 		if( obj == null ){
             obj = HZAware.initialize(clazz);
+            returnVal = obj;
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();
@@ -96,6 +102,8 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 				}
 			}
 		}
+
+        return returnVal;
 	}
 	
 	private enum ItemListenerEnum {

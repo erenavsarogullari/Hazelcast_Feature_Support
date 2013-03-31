@@ -22,8 +22,8 @@ public class InstanceListenerProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-	public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
-		
+	public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+		return null;
 	}
 
     @Override

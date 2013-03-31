@@ -1,17 +1,13 @@
 package com.hazelcast.annotation.builder;
 
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import com.hazelcast.common.AnnotatedClass;
-import com.hazelcast.common.Annotations;
-import com.hazelcast.common.ClasspathScanEventListener;
-import com.hazelcast.common.ClasspathScanner;
-import com.hazelcast.common.HazelcastCommonData;
-import com.hazelcast.common.PriorityComparator;
+import com.hazelcast.common.*;
 import com.hazelcast.srv.HazelcastService;
 import com.hazelcast.srv.IHazelcastService;
 
@@ -31,6 +27,8 @@ public class HazelcastAnnotationBuilder {
     private Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentSkipListMap<Annotations.SupportedAnnotation, List<Class<?>>>(new PriorityComparator());
     private IHazelcastService hazelcastService = new HazelcastService();
 
+    private ObjectCreator objectCreator = new DefaultObjectCreator();
+
     public static void build(String packageName) {
         INSTANCE.buildPackage(packageName);
     }
@@ -41,6 +39,10 @@ public class HazelcastAnnotationBuilder {
 
     public static HazelcastAnnotationBuilder getInstance(){
         return INSTANCE;
+    }
+
+    public static ObjectCreator getObjectCreator(){
+        return INSTANCE.objectCreator;
     }
 
     public void buildPackage(String packageName){
@@ -57,6 +59,10 @@ public class HazelcastAnnotationBuilder {
         return new ClasspathScannerImpl();
     }
 
+    public void setObjectCreator(ObjectCreator objectCreator) {
+        this.objectCreator = objectCreator;
+    }
+
     public void fireEvents() {
     	for(Map.Entry<Annotations.SupportedAnnotation, List<Class<?>>> entry : classMap.entrySet()){
             
@@ -67,7 +73,7 @@ public class HazelcastAnnotationBuilder {
 
                 HazelcastAnnotationProcessor processor = supportedAnnotation.getProcessor();
                 if (eligible || (!eligible && processor.canBeProcessedMoreThanOnce())) {
-                	processor.process(hazelcastService, clazz, clazz.getAnnotation((Class) supportedAnnotation.getClassType()));
+                    processor.process(hazelcastService, clazz, clazz.getAnnotation((Class) supportedAnnotation.getClassType()));
                 }
 
                 HazelcastCommonData.classParsed(clazz);

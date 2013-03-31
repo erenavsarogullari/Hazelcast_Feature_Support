@@ -30,7 +30,7 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
     }
 
     @Override
-    public void process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
+    public Object process(IHazelcastService hazelcastService, Class<?> clazz, Annotation annotation) {
         Configuration config = (Configuration) annotation;
 
         Config cfg = null;
@@ -54,6 +54,8 @@ public class ConfigurationProcessor implements HazelcastAnnotationProcessor {
         setInterfacesConfig(nwConfig, config.interfaces());
 
         Hazelcast.newHazelcastInstance(cfg);
+
+        return null;
     }
 
     private void setBasicConfig(NetworkConfig nwConfig, Configuration config){
