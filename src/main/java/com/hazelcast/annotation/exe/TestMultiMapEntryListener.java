@@ -1,6 +1,5 @@
 package com.hazelcast.annotation.exe;
 
-import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.EntryAdded;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.listener.EntryRemoved;

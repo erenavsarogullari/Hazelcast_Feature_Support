@@ -1,6 +1,5 @@
 package com.hazelcast.annotation.exe;
 
-import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
 import com.hazelcast.common.MessageListenerTypeEnum;

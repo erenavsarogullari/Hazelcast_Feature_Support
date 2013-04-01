@@ -1,11 +1,9 @@
 package com.hazelcast.annotation.exe;
 
-import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
-import com.hazelcast.core.ItemEvent;
-
 import com.hazelcast.common.ItemListenerTypeEnum;
+import com.hazelcast.core.ItemEvent;
 /**
  * Test Item Listener Class
  *

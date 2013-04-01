@@ -17,16 +17,17 @@ public class TestItemListener {
 	private static final Logger logger = Logger.getLogger(TestItemListener.class);
 	
 	@Autowired
-	Test test;
+	User user;
 	
 	@ItemAdded
 	public void itemAdded(ItemEvent event) {
-		System.out.println("TEST => "+test);
-		logger.debug("Item is really added " + event.toString());
+		logger.debug("Item is added. " + event.toString());
+		logger.debug("Autowired property is coming. " + user);
 	}
 	
 	@ItemRemoved
 	public void itemRemoved(ItemEvent event) {
-		System.out.println("Item is really added " + event.toString());
-	}
+		logger.debug("Item is removed. " + event.toString());
+	}	
+	
 }

@@ -9,14 +9,8 @@
 		http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-	<context:annotation-config />
-	
-    <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.itemlistener"/>
+    <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.instance"/>
 
-	<bean id="user" class="com.hazelcast.annotation.spring.example.itemlistener.User">
-		<property name="name" value="Bruce Willis" />
-	</bean>
-
-	<bean id="hzSpringListenerExample" class="com.hazelcast.annotation.spring.example.itemlistener.HZSpringListenerExample"/>
+	<bean id="hzSpringInstanceExample" class="com.hazelcast.annotation.spring.example.executorservice.HZSpringExecutorServiceExample"/>
 
 </beans>

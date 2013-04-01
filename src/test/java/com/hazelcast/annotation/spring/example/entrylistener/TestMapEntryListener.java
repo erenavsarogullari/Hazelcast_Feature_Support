@@ -8,7 +8,7 @@ import com.hazelcast.annotation.listener.EntryRemoved;
 import com.hazelcast.common.EntryListenerTypeEnum;
 import com.hazelcast.core.EntryEvent;
 
-@EntryListener(name ={"testMap"}, type=EntryListenerTypeEnum.MAP, needsValue=true)
+@EntryListener(name ={"testMap", "testConcurrentHashMap"}, type=EntryListenerTypeEnum.MAP, needsValue=true)
 public class TestMapEntryListener {
 
 	private static final Logger logger = Logger.getLogger(TestMapEntryListener.class);

@@ -1,10 +1,13 @@
 package com.hazelcast.annotation.spring.example.entrylistener;
 
+import java.util.concurrent.ConcurrentMap;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
+import com.hazelcast.annotation.data.Distributed;
 import com.hazelcast.annotation.data.IMap;
 import com.hazelcast.annotation.data.MultiMap;
 
@@ -18,6 +21,9 @@ public class HZSpringEntryListenerExample {
 	@MultiMap(name = "testMultiMap")
 	com.hazelcast.core.MultiMap testMultiMap;
 	
+	@Distributed(name = "testConcurrentHashMap")
+	ConcurrentMap testConcurrentMap;
+	
 	public static void main(String[] args){
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/example/entrylistener/entryListenerExample.xml");
         
@@ -30,6 +36,9 @@ public class HZSpringEntryListenerExample {
         bean.testMultiMap.put("2", "Test_MultiMap_Entry_2");
         bean.testMultiMap.put("3", "Test_MultiMap_Entry_3");
         
+        bean.testConcurrentMap.put("1", "Test_ConcurrentMap_Entry_1");
+        bean.testConcurrentMap.put("2", "Test_ConcurrentMap_Entry_2");
+        bean.testConcurrentMap.put("3", "Test_ConcurrentMap_Entry_3");
     }
 
 }

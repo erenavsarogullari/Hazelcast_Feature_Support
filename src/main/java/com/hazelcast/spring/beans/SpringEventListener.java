@@ -30,8 +30,6 @@ public class SpringEventListener implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("processing bean " + beanName);
-
         if( bean.getClass().isAnnotationPresent(HazelcastAware.class) ){
             HazelcastAnnotationBuilder.parseObjectAnnotations(bean);
         }
