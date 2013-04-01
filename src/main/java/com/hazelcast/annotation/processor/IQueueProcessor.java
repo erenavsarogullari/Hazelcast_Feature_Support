@@ -47,7 +47,7 @@ public class IQueueProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
     public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
-        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+        HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(instanceName);
 
         com.hazelcast.core.IQueue<Object> distributedQueue = hazelcastInstance.getQueue(typeName);
         if(distributedQueue != null) {

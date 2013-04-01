@@ -45,7 +45,7 @@ public class ISetProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
     public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
-        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+        HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(instanceName);
 
         com.hazelcast.core.ISet<Object> distributedSet = hazelcastInstance.getSet(typeName);
         if(distributedSet != null) {

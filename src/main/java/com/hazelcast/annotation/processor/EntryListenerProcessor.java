@@ -76,7 +76,14 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
         EntryListenerProxy entryListenerProxy = null;
 
         if (obj == null) {
-            obj = HZAware.initialize(clazz);
+            //obj = HZAware.initialize(clazz);
+            try {
+                obj = clazz.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();

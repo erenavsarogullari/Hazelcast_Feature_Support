@@ -45,7 +45,7 @@ public class IMapProcessor implements HazelcastFieldAnnotationProcessor {
 
     @Override
     public void assignDistributedData(IHazelcastService hazelcastService, Object obj, Field field, String instanceName, String typeName){
-        HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
+        HazelcastInstance hazelcastInstance = hazelcastService.getCurrentHazelcastInstance(instanceName);
 
         com.hazelcast.core.IMap<Object, Object> distributedMap = hazelcastInstance.getMap(typeName);
         if(distributedMap != null) {
