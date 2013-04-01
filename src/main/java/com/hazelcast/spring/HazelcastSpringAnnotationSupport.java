@@ -3,11 +3,14 @@ package com.hazelcast.spring;
 import com.hazelcast.common.AnnotatedClass;
 import com.hazelcast.common.Annotations;
 import com.hazelcast.common.ClasspathScanEventListener;
+import com.hazelcast.common.HazelcastCommonData;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
+import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.common.ObjectCreator;
 import com.hazelcast.spring.beans.ApplicationContextListener;
@@ -59,7 +62,12 @@ public class HazelcastSpringAnnotationSupport implements BeanDefinitionParser {
                 Annotations.SupportedAnnotation supported = supportedAnnotatedClass.getSupportedAnnotation();
 
                 if( supported == Annotations.SupportedAnnotation.CONFIGURATION ){
-                    supported.getProcessor().process(builder.getHazelcastService(), supportedAnnotatedClass.getClazz(), supportedAnnotatedClass.getAnnotation() );
+                	boolean eligible = HazelcastCommonData.isEligibleForParsing(supportedAnnotatedClass.getClass());
+                	if (eligible || (!eligible && supported.getProcessor().canBeProcessedMoreThanOnce())) {
+                		supported.getProcessor().process(builder.getHazelcastService(), supportedAnnotatedClass.getClazz(), supportedAnnotatedClass.getAnnotation() );
+                	}
+                	
+                	HazelcastCommonData.classParsed(supportedAnnotatedClass.getClazz());
                 } else if( supported != Annotations.SupportedAnnotation.HAZELCASTAWARE ) {
                     needsRegister = true;
                 }

@@ -1,6 +1,7 @@
 package com.hazelcast.annotation.spring.example.listener;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.ItemAdded;
@@ -15,8 +16,12 @@ public class TestItemListener {
 
 	private static final Logger logger = Logger.getLogger(TestItemListener.class);
 	
+	@Autowired
+	Test test;
+	
 	@ItemAdded
 	public void itemAdded(ItemEvent event) {
+		System.out.println("TEST => "+test);
 		logger.debug("Item is really added " + event.toString());
 	}
 	

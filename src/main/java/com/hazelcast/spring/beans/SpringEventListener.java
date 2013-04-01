@@ -3,6 +3,8 @@ package com.hazelcast.spring.beans;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.common.AnnotatedClass;
 import com.hazelcast.common.Annotations;
+import com.hazelcast.common.HazelcastCommonData;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -28,7 +30,14 @@ public class SpringEventListener implements BeanPostProcessor {
         for (AnnotatedClass supportedAnnotatedClass : supportedAnnotatedClassList) {
             Annotations.SupportedAnnotation supported = supportedAnnotatedClass.getSupportedAnnotation();
             if (supported != Annotations.SupportedAnnotation.CONFIGURATION) {
-                HazelcastAnnotationBuilder.parseObjectAnnotations(bean);
+            	boolean eligible = HazelcastCommonData.isEligibleForParsing(supportedAnnotatedClass.getClass());
+            	if (eligible || (!eligible && supported.getProcessor().canBeProcessedMoreThanOnce())) {
+            		HazelcastAnnotationBuilder.parseObjectAnnotations(bean);
+            	}
+            	
+            	HazelcastCommonData.classParsed(supportedAnnotatedClass.getClazz());
+                
+                break;
             }
         }
 
