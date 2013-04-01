@@ -1,4 +1,4 @@
-package com.hazelcast.annotation.spring.example.listener;
+package com.hazelcast.annotation.spring.example.itemlistener;
 
 public class Test {
 

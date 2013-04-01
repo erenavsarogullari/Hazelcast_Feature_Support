@@ -1,4 +1,4 @@
-package com.hazelcast.annotation.spring.example.listener;
+package com.hazelcast.annotation.spring.example.itemlistener;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -12,8 +12,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class HZSpringConfigurationExample {
 
     public static void main(String[] args){
-        ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("spring/example/configuration/configurationExample.xml");
-
+        new ClassPathXmlApplicationContext("spring/example/configuration/configurationExample.xml");
+        
     }
 
 }

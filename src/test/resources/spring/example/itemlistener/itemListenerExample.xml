@@ -10,10 +10,11 @@
 	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
 	<context:annotation-config />
-    <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.listener"/>
+	
+    <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.itemlistener"/>
 
-	<bean id="test" class="com.hazelcast.annotation.spring.example.listener.Test"/>
+	<bean id="test" class="com.hazelcast.annotation.spring.example.itemlistener.Test"/>
 
-	<bean id="hzSpringListenerExample" class="com.hazelcast.annotation.spring.example.listener.HZSpringListenerExample"/>
+	<bean id="hzSpringListenerExample" class="com.hazelcast.annotation.spring.example.itemlistener.HZSpringListenerExample"/>
 
 </beans>
