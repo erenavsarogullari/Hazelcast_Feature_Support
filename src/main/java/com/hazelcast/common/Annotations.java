@@ -30,7 +30,7 @@ public class Annotations {
     public enum SupportedAnnotation {
 
         CONFIGURATION(Configuration.class, new ConfigurationProcessor(), 1),
-        HAZELCASTAWARE(HazelcastAware.class, new HazelcastAwareProcessor(), 2),
+        //HAZELCASTAWARE(HazelcastAware.class, new HazelcastAwareProcessor(), 2),
         ITEM_LISTENER(ItemListener.class, new ItemListenerProcessor(), 3),
         ENTRY_LISTENER(EntryListener.class, new EntryListenerProcessor(), 4),
         MEMBERSHIP_LISTENER(MembershipListener.class, new MembershipListenerProcessor(), 5),

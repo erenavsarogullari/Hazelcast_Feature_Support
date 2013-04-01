@@ -15,7 +15,6 @@ import com.hazelcast.core.Message;
  * @version 1.0.0
  *
  */
-@HazelcastAware
 @MessageListener(name = {"testTopic", "testTopic2"}, type=MessageListenerTypeEnum.TOPIC)
 public class TestMessageListener {	
 	

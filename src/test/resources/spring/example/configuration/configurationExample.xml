@@ -6,6 +6,6 @@
 		http://www.hazelcast.com/extra/schema/spring
 		http://www.hazelcast.com/extra/schema/spring/hazelcast-extra.xsd">
 
-    <hzExtra:annotation-support />
+    <hzExtra:annotation-support package="com.hazelcast.annotation.spring.example.configuration" />
 
 </beans>

@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
+import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.EntryAdded;
@@ -12,6 +13,7 @@ import com.hazelcast.annotation.listener.EntryEvicted;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.listener.EntryRemoved;
 import com.hazelcast.annotation.listener.EntryUpdated;
+import com.hazelcast.common.Utilities;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.MultiMap;
@@ -76,14 +78,7 @@ public class EntryListenerProcessor implements HazelcastAnnotationProcessor {
         EntryListenerProxy entryListenerProxy = null;
 
         if (obj == null) {
-            //obj = HZAware.initialize(clazz);
-            try {
-                obj = clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            obj = Utilities.createAnnotatedInstance(clazz);
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();

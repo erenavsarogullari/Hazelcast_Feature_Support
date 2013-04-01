@@ -5,7 +5,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.core.ItemEvent;
 
-import com.hazelcast.common.ItemListenerTypeEnum;;
+import com.hazelcast.common.ItemListenerTypeEnum;
 /**
  * Test Item Listener Class
  *
@@ -15,7 +15,6 @@ import com.hazelcast.common.ItemListenerTypeEnum;;
  * @version 1.0.0
  *
  */
-@HazelcastAware
 @ItemListener(name ={"testQueue", "testQueue2"}, type=ItemListenerTypeEnum.QUEUE, needsValue=true)
 public class TestQueueItemListener {	
 	

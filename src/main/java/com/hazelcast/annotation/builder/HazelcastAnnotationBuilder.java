@@ -28,8 +28,6 @@ public class HazelcastAnnotationBuilder {
 
     private IHazelcastService hazelcastService = new HazelcastService();
 
-    private ObjectCreator objectCreator = new DefaultObjectCreator();
-
     public static void build(String packageName) {
         INSTANCE.buildPackage(packageName);
     }
@@ -42,10 +40,6 @@ public class HazelcastAnnotationBuilder {
         return INSTANCE;
     }
 
-    public static ObjectCreator getObjectCreator(){
-        return INSTANCE.objectCreator;
-    }
-
     public IHazelcastService getHazelcastService() {
         return hazelcastService;
     }
@@ -56,16 +50,19 @@ public class HazelcastAnnotationBuilder {
     }
 
     public void buildObjectAnnotations(Object obj) {
-        List<AnnotatedClass> annotatedClassList = Annotations.SupportedAnnotation.getAnnotatedClassList(obj.getClass());
-        fireEventsForObject(obj, annotatedClassList);
+        List<AnnotatedField> supportedAnnotationsList = Annotations.SupportedFieldAnnotation.getSupportedAnnotations(obj.getClass());
+
+        for (AnnotatedField supported : supportedAnnotationsList) {
+            HazelcastFieldAnnotationProcessor processor = supported.getSupportedAnnotatiton().getProcessor();
+            processor.process(hazelcastService, obj, supported.getField(), supported.getAnnotation());
+        }
+
+        //List<AnnotatedClass> annotatedClassList = Annotations.SupportedAnnotation.getAnnotatedClassList(obj.getClass());
+        //fireEventsForObject(obj, annotatedClassList);
     }
 
     public ClasspathScannerImpl getClasspathScanner(){
         return new ClasspathScannerImpl();
-    }
-
-    public void setObjectCreator(ObjectCreator objectCreator) {
-        this.objectCreator = objectCreator;
     }
 
     public void fireEvents() {

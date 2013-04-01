@@ -1,11 +1,10 @@
 package com.hazelcast.annotation.exe;
 
-import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
+import com.hazelcast.common.ItemListenerTypeEnum;
 import com.hazelcast.core.ItemEvent;
 
-import com.hazelcast.common.ItemListenerTypeEnum;;
 /**
  * Test Item Listener Class
  *
@@ -15,7 +14,6 @@ import com.hazelcast.common.ItemListenerTypeEnum;;
  * @version 1.0.0
  *
  */
-@HazelcastAware
 @ItemListener(name ={"testSet", "testSet2"}, type=ItemListenerTypeEnum.SET, needsValue=true)
 public class TestSetItemListener {	
 	

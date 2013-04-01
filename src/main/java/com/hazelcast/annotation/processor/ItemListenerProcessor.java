@@ -11,6 +11,7 @@ import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.annotation.listener.ItemRemoved;
+import com.hazelcast.common.Utilities;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IQueue;
@@ -68,16 +69,7 @@ public class ItemListenerProcessor implements HazelcastAnnotationProcessor {
 	
 	private void addItemListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method itemAdded, Method itemRemoved) {
 		if( obj == null ){
-           // obj = HZAware.initialize(clazz);
-			try {
-				obj = clazz.newInstance();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            obj = Utilities.createAnnotatedInstance(clazz);
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();

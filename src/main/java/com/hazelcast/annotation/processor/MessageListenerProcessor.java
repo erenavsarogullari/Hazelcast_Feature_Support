@@ -9,6 +9,7 @@ import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationProcessor;
 import com.hazelcast.annotation.listener.MessageListener;
 import com.hazelcast.annotation.listener.OnMessage;
+import com.hazelcast.common.Utilities;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.listener.proxy.MessageListenerProxy;
@@ -61,14 +62,7 @@ public class MessageListenerProcessor implements HazelcastAnnotationProcessor {
 
     private void addMessageListener(IHazelcastService hazelcastService, Class<?> clazz, Object obj, Annotation annotation, Method onMessage) {
         if (obj == null) {
-            // obj = HZAware.initialize(clazz);
-            try {
-                obj = clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            obj = Utilities.createAnnotatedInstance(clazz);
         }
 
         Set<HazelcastInstance> allHazelcastInstances = hazelcastService.getAllHazelcastInstances();

@@ -16,7 +16,6 @@ import com.hazelcast.core.EntryEvent;
  * @version 1.0.0
  *
  */
-@HazelcastAware
 @EntryListener(name = {"testMultiMap", "testMultiMap2"}, type=EntryListenerTypeEnum.MULTI_MAP, needsValue=true)
 public class TestMultiMapEntryListener {	
 	
