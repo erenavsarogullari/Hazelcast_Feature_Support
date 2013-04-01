@@ -33,7 +33,7 @@ public class Main extends ParentClass {
 	@IExecutorService(instanceName = "MyHazelcastInstance", corePoolSize = 2, keepAliveSeconds = 60, maxPoolSize = 5, name = "test-exec-srv")
 	private java.util.concurrent.ExecutorService executorService;
 	
-	@IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueue")
+    @IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueue")
     private com.hazelcast.core.IQueue testQueue;
 	
 	@IQueue(instanceName = "MyHazelcastInstance", maxSizePerJvm = 0, name = "testQueue2")

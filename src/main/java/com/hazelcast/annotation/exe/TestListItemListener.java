@@ -16,12 +16,11 @@ import com.hazelcast.common.ItemListenerTypeEnum;;
  *
  */
 @HazelcastAware
-@ItemListener(name ={"testList", "testList2", "testSet", 
-		                                "testSet2", "testQueue", "testQueue2"},	type=ItemListenerTypeEnum.LIST, needsValue=true)
-public class TestItemListener {	
+@ItemListener(name ={"testList", "testList2"}, type=ItemListenerTypeEnum.LIST, needsValue=true)
+public class TestListItemListener {	
 	
 	@ItemAdded
 	public void myListIsGrowing(ItemEvent event) {
-		System.out.println("Item is really added " + event.toString());
+		System.out.println("LIST - Item is really added " + event.toString());
 	}
 }

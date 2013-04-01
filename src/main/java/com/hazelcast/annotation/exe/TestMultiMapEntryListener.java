@@ -22,11 +22,11 @@ public class TestMultiMapEntryListener {
 	
 	@EntryAdded
 	public void entryAdded(EntryEvent event) {
-		System.out.println("Entry is added " + event.toString());
+		System.out.println("MULTI_MAP - Entry is added " + event.toString());
 	}
 	
 	@EntryRemoved
 	public void entryRemoved(EntryEvent event) {
-		System.out.println("Entry is remowed " + event.toString());
+		System.out.println("MULTI_MAP - Entry is remowed " + event.toString());
 	}
 }

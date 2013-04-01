@@ -21,6 +21,6 @@ public class TestMessageListener {
 	
 	@OnMessage
 	public void entryAdded(Message message) {
-		System.out.println("Message is added. Message Object : " + message.getMessageObject() + ", Source : " + message.getSource());
+		System.out.println("TOPIC - Message is added. Message Object : " + message.getMessageObject() + ", Source : " + message.getSource());
 	}
 }
