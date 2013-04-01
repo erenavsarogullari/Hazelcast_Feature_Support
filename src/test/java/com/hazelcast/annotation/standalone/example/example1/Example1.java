@@ -11,7 +11,6 @@ public class Example1{
 	public static void main(String[] args) {
         HazelcastAnnotationBuilder.build("com.hazelcast.annotation.standalone.example.example1");
         
-        Hazelcast.shutdownAll();       
-        
+        Hazelcast.shutdownAll();
 	}
 }

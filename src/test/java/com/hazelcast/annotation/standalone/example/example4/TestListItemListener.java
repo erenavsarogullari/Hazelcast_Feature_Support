@@ -5,6 +5,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.common.ItemListenerTypeEnum;
 import com.hazelcast.core.ItemEvent;
+import org.apache.log4j.Logger;
 
 /**
  * Test Item Listener Class
@@ -16,10 +17,12 @@ import com.hazelcast.core.ItemEvent;
  *
  */
 @ItemListener(name ={"testList"}, type=ItemListenerTypeEnum.LIST, needsValue=true)
-public class TestListItemListener {	
-	
+public class TestListItemListener {
+
+    private static final Logger logger = Logger.getLogger(TestListItemListener.class);
+
 	@ItemAdded
 	public void myListIsGrowing(ItemEvent event) {
-		System.out.println("LIST - Item is really added " + event.toString());
+		logger.info("LIST - Item is really added " + event.toString());
 	}
 }

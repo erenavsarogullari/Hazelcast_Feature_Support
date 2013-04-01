@@ -3,6 +3,7 @@ package com.hazelcast.annotation.standalone.example.example2;
 import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.core.HazelcastInstance;
+import org.apache.log4j.Logger;
 
 /**
  * Date: 01/04/2013 01:54
@@ -10,14 +11,16 @@ import com.hazelcast.core.HazelcastInstance;
  */
 @HazelcastAware
 public class Worker {
+    private static final Logger logger = Logger.getLogger(Worker.class);
+
     @HZInstance
     private HazelcastInstance instance;
 
     public void work(){
         if( instance == null ){
-            System.out.println("instance is null! Example doesn't work as expected");
+            logger.error("instance is null! Example doesn't work as expected");
         } else {
-            System.out.println("Worked, perfect!");
+            logger.info("Worked, perfect! Library injected the instance");
         }
     }
 }

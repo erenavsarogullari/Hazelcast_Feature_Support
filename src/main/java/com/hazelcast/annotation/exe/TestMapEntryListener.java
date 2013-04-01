@@ -5,6 +5,7 @@ import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.listener.EntryAdded;
 import com.hazelcast.annotation.listener.EntryListener;
 import com.hazelcast.annotation.listener.EntryRemoved;
+import com.hazelcast.annotation.listener.EntryUpdated;
 import com.hazelcast.common.EntryListenerTypeEnum;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.HazelcastInstance;
@@ -25,10 +26,15 @@ public class TestMapEntryListener {
     @HZInstance("MyHazelcastInstance")
     private HazelcastInstance instance;
 
-	@EntryAdded
-	public void entryAdded(EntryEvent event) {
-		System.out.println("MAP - Entry is added " + event.toString() + " instance = " + instance);
-	}
+    @EntryAdded
+    public void entryAdded(EntryEvent event) {
+        System.out.println("MAP - Entry is added " + event.toString() + " instance = " + instance);
+    }
+
+    @EntryUpdated
+    public void entryUpdated(EntryEvent event) {
+        System.out.println("MAP - Entry is updated " + event.toString() + " instance = " + instance);
+    }
 	
 	@EntryRemoved
 	public void entryRemoved(EntryEvent event) {

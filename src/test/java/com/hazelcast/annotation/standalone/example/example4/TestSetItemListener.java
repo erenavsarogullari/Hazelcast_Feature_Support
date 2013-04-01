@@ -5,6 +5,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.common.ItemListenerTypeEnum;
 import com.hazelcast.core.ItemEvent;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -17,10 +18,12 @@ import com.hazelcast.core.ItemEvent;
  *
  */
 @ItemListener(name ={"testSet"}, type=ItemListenerTypeEnum.SET, needsValue=true)
-public class TestSetItemListener {	
-	
+public class TestSetItemListener {
+
+    private static final Logger logger = Logger.getLogger(TestSetItemListener.class);
+
 	@ItemAdded
 	public void itemAdded(ItemEvent event) {
-		System.out.println("SET - Item is really added " + event.toString());
+		logger.info("SET - Item is really added " + event.toString());
 	}
 }

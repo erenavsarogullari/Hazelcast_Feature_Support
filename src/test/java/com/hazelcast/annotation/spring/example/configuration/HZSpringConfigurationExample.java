@@ -2,6 +2,7 @@ package com.hazelcast.annotation.spring.example.configuration;
 
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
+import com.hazelcast.core.Hazelcast;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -13,7 +14,8 @@ public class HZSpringConfigurationExample {
 
     public static void main(String[] args){
         new ClassPathXmlApplicationContext("spring/example/configuration/configurationExample.xml");
-        
+
+        Hazelcast.shutdownAll();
     }
 
 }

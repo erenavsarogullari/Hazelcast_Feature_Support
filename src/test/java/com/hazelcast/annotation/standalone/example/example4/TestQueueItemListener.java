@@ -5,6 +5,7 @@ import com.hazelcast.annotation.listener.ItemAdded;
 import com.hazelcast.annotation.listener.ItemListener;
 import com.hazelcast.common.ItemListenerTypeEnum;
 import com.hazelcast.core.ItemEvent;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -17,10 +18,12 @@ import com.hazelcast.core.ItemEvent;
  *
  */
 @ItemListener(name ={"testQueue", "testQueue2"}, type=ItemListenerTypeEnum.QUEUE, needsValue=true)
-public class TestQueueItemListener {	
-	
+public class TestQueueItemListener {
+
+    private static final Logger logger = Logger.getLogger(TestQueueItemListener.class);
+
 	@ItemAdded
 	public void itemAdded(ItemEvent event) {
-		System.out.println("QUEUE - Item is really added " + event.toString());
+		logger.info("QUEUE - Item is really added " + event.toString());
 	}
 }

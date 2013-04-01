@@ -11,6 +11,7 @@ import com.hazelcast.annotation.builder.HZAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
 import com.hazelcast.annotation.configuration.Configuration;
 import com.hazelcast.annotation.configuration.Multicast;
+import com.hazelcast.annotation.configuration.TcpIp;
 import com.hazelcast.annotation.data.Distributed;
 import com.hazelcast.annotation.data.HZInstance;
 import com.hazelcast.annotation.data.IList;
@@ -23,7 +24,7 @@ import com.hazelcast.config.MultiMapConfig.ValueCollectionType;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
-@Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, multicast = @Multicast)
+@Configuration(value="MyHazelcastInstance", port = 8888, autoIncrement = true, tcpip = @TcpIp(members = {"192.168.1.2"}))
 @HazelcastAware
 public class Main extends ParentClass {
 
@@ -94,7 +95,7 @@ public class Main extends ParentClass {
 	    main.testMultiMap.put(1, "TestMultiMap1");
 		main.testMultiMap.put(1, "TestMultiMap2");
 		main.testMultiMap.put(2, "TestMultiMap3");
-		
+
 		main.testMultiMap2.put(3, "TestMultiMap3");
 		main.testMultiMap2.put(4, "TestMultiMap4");
 		main.testMultiMap2.put(5, "TestMultiMap5");
@@ -104,10 +105,10 @@ public class Main extends ParentClass {
 
         main.testSet.add("Test Set");
         main.testSet2.add("Test Set2");
-     
+
         main.testTopic.publish("Test Topic");
         main.testTopic2.publish("Test Topic2");
-        
+
         Future<String> task = main.executorService.submit(new Echo("Eren"));
 		   try {
 			String echoResult = task.get();
@@ -116,7 +117,7 @@ public class Main extends ParentClass {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
-		}		 
+		}
         
         Hazelcast.shutdownAll();       
         
