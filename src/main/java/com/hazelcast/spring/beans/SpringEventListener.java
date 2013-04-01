@@ -1,9 +1,12 @@
 package com.hazelcast.spring.beans;
 
-import com.hazelcast.annotation.HazelcastAware;
 import com.hazelcast.annotation.builder.HazelcastAnnotationBuilder;
+import com.hazelcast.common.AnnotatedClass;
+import com.hazelcast.common.Annotations;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+
+import java.util.List;
 
 /**
  * Date: 31/03/2013 22:37
@@ -18,10 +21,15 @@ public class SpringEventListener implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("processing bean " + beanName );
+        System.out.println("processing bean " + beanName);
         // parse hz annotated fields
-        if( bean.getClass().isAnnotationPresent(HazelcastAware.class) ){
-            HazelcastAnnotationBuilder.parseObjectAnnotations(bean);
+        List<AnnotatedClass> supportedAnnotatedClassList = Annotations.SupportedAnnotation.getAnnotatedClassList(bean.getClass());
+
+        for (AnnotatedClass supportedAnnotatedClass : supportedAnnotatedClassList) {
+            Annotations.SupportedAnnotation supported = supportedAnnotatedClass.getSupportedAnnotation();
+            if (supported != Annotations.SupportedAnnotation.CONFIGURATION) {
+                HazelcastAnnotationBuilder.parseObjectAnnotations(bean);
+            }
         }
 
         return bean;

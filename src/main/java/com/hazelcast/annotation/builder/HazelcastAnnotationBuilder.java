@@ -25,6 +25,7 @@ public class HazelcastAnnotationBuilder {
     private static final HazelcastAnnotationBuilder INSTANCE = new HazelcastAnnotationBuilder();
 
     private Map<Annotations.SupportedAnnotation, List<Class<?>>> classMap = new ConcurrentSkipListMap<Annotations.SupportedAnnotation, List<Class<?>>>(new PriorityComparator());
+
     private IHazelcastService hazelcastService = new HazelcastService();
 
     private ObjectCreator objectCreator = new DefaultObjectCreator();
@@ -43,6 +44,10 @@ public class HazelcastAnnotationBuilder {
 
     public static ObjectCreator getObjectCreator(){
         return INSTANCE.objectCreator;
+    }
+
+    public IHazelcastService getHazelcastService() {
+        return hazelcastService;
     }
 
     public void buildPackage(String packageName){
